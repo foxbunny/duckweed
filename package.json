@@ -1,0 +1,39 @@
+{
+  "name": "duckweed",
+  "version": "0.0.0",
+  "description": "JavaScript microframework for programming reactive interfaces using Model-Action-View architecture",
+  "repository": "https://github.com/foxbunny/duckweed.git",
+  "author": "Hajime Yamasaki Vukelic",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "dependencies": {
+    "query-string": "^5.0.0",
+    "snabbdom": "^0.7.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^20.0.8",
+    "@types/query-string": "^5.0.0",
+    "jest": "^20.0.4",
+    "ts-jest": "^20.0.13",
+    "tslint": "^5.7.0",
+    "typescript": "^2.4.2"
+  },
+  "scripts": {
+    "start": "jest --watch",
+    "test": "jest",
+    "build": "tsc",
+    "lint": "tslint -p . lib"
+  },
+  "jest": {
+    "testRegex": "\\.test\\.tsx?$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "transform": {
+      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "mapCoverage": true
+  }
+}
