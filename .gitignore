@@ -1,2 +1,10 @@
+# Dependencies
 /node_modules
-/dist
+
+# Log files
+*.log
+
+# Build artifacts
+*.js
+*.d.ts
+*.js.map
