@@ -5,7 +5,7 @@
 
 import {VNode} from "snabbdom/vnode";
 
-import html, {patch} from "./html";
+import {patch} from "./html";
 import * as is from "./is";
 
 type PatchFunction<T = any> = (model: T) => T;
@@ -67,7 +67,7 @@ const setNextRender = (state: RunnerState, render: RenderFunction): void => {
 const createRenderer = (state: RunnerState, view: ViewFunction) => {
   return (actionHandler: ActionHandler) => {
     const props: Props = {model: state.model, act: actionHandler};
-    state.vnodes = patch(state.vnodes, html(view, props));
+    state.vnodes = patch(state.vnodes, view(props));
     state.nextRenderId = null;
   };
 };
