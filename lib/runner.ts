@@ -22,6 +22,10 @@ interface RunnerState<T = any> {
   nextRenderId: null | number;
 }
 
+interface RunnerOptions {
+  root?: string | Element | VNode;
+}
+
 /**
  * Clears the timer if one was set by the patch function.
  */
@@ -110,6 +114,10 @@ const createActionHandler = <T = any>(state: RunnerState, actions: Actions<T>, r
   };
 };
 
+const DEFAULT_OPTIONS = {
+  root: "#app",
+};
+
 /**
  * Create and start a new application runtime
  *
@@ -118,11 +126,16 @@ const createActionHandler = <T = any>(state: RunnerState, actions: Actions<T>, r
  * render process, rendering the initial view onto the root element (root
  * element is replaced in the process).
  */
-const runner = async <T = any> (model: T, actions: Actions<T>, view: ViewFunction, root: string = "#app") => {
+const runner = <T = any> (model: T, actions: Actions<T>, view: ViewFunction, options: RunnerOptions = {}) => {
+  const opt = {
+    ...DEFAULT_OPTIONS,
+    ...options,
+  };
+
   const state: RunnerState<T> = {
     model,
     nextRenderId: null,
-    vnodes: document.querySelector(root) as HTMLElement,
+    vnodes: is.str(opt.root) ? (document.querySelector(opt.root) as Element) : opt.root,
   };
 
   // Prepare the engine
@@ -141,6 +154,7 @@ export {
   ModelPatcher,
   Actions,
   RunnerState,
+  RunnerOptions,
   runner,
 };
 export default runner;
