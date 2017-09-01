@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`runner Should pass the model to the view as props 1`] = `
+<div>
+  Hello, model
+</div>
+`;
+
+exports[`runner Should render the initial view 1`] = `
+<div>
+  Hello, root
+</div>
+`;
