@@ -21,9 +21,8 @@ This is the simplest possible application you can create with Duckweed:
 const h = require("snabbdom/h");
 const duckweed = require("duckweed");
 
-const view = () => h("div", "Hello Duckweed!");
-
-duckweed.runner(undefined, {}, view);
+// Look, ma', one-liner!
+duckweed.runner(undefined, {}, () => h("div", "Hello Duckweed!"));
 ```
 
 As can be seen from the snippet, we can use normal Snabbdom `h()` to construct
