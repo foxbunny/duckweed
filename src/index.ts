@@ -3,8 +3,21 @@
  * All rights reserved.
  */
 
-import html from "./html";
-import runner from "./runner";
+import {VNode} from "snabbdom/vnode";
+
+import html, {GenericProps} from "./html";
+import runner, {ViewFunction} from "./runner";
+
+declare global {
+  namespace JSX {
+    // tslint:disable:no-empty-interface
+    interface Element extends VNode {}
+    type ElementClass = ViewFunction;
+    interface IntrinsicElements {
+      [element: string]: GenericProps;
+    }
+  }
+}
 
 export {
   html,
