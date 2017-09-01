@@ -26,8 +26,10 @@ type ViewFunction = (props: Props) => VNode;
 
 type RenderFunction = (handler: ActionHandler) => void;
 
+type ActionMiddleware = (fn: PatchFunction) => PatchFunction;
+
 interface Actions<T = any> {
-  [action: string]: (patch: ModelPatcher<T>, ...args: any[]) => Promise<void>;
+  [action: string]: (patch: ModelPatcher<T>, ...args: any[]) => void | Promise<void>;
 }
 
 interface RunnerState<T = any> {
@@ -38,6 +40,7 @@ interface RunnerState<T = any> {
 
 interface RunnerOptions {
   root?: string | Element | VNode;
+  middleware?: ActionMiddleware[];
 }
 
 /**
@@ -71,41 +74,13 @@ const createRenderer = (state: RunnerState, view: ViewFunction) => {
   };
 };
 
-/**
- * Construct the final argument list for action handlers
- *
- * This function takes the user arguments (which are supplied in the props), and
- * event handler callback arguments (usually an `Event` object for event
- * handlers, `VNode` objects for hooks, or some special object for synthetic
- * events), and combines those two as needed.
- *
- * This method generates various convenience arguments, like input value for
- * input events, checkbox state for checkbox toggle events, and so on.
- */
-const actionArgs = (userArgs: any[], eventCallbackArgs: any[]) => {
-  const first = eventCallbackArgs[0];
-  if (is.vnode(first)) {
-    // This is mostly for hooks. We add the vnode objects to args.
-    return userArgs.concat(eventCallbackArgs);
-  } else if (is.changeEvent(first) && is.checkbox(first.target)) {
-    return userArgs.concat(first.target.checked, first.target.value);
-  } else if (is.inputEvent(first) && is.input(first.target)) {
-    // For convenience, process events and extract implied arguments
-    first.preventDefault();
-    return userArgs.concat(first.target.value);
-  } else if (is.pathData(first)) {
-    return userArgs.concat(first);
-  }
-  return userArgs;
-};
-
 const actionHandlerFactory = (patcher: ModelPatcher, actions: Actions, baseArgs: any[] = []): ActionHandler => {
   const handler = (action: any, ...args: any[]) => (...eventArgs: any[]) => {
     if (action == null) {
       return;
     }
     const actionFn = actions[action];
-    actionFn(patcher, ...actionArgs(baseArgs.concat(args), eventArgs));
+    actionFn(patcher, ...baseArgs.concat(args), ...eventArgs);
   };
   (handler as any).as = (...args: any[]) => actionHandlerFactory(patcher, actions, args);
   return handler as ActionHandler;
@@ -129,16 +104,22 @@ const createActionHandler = <T = any>(
   state: RunnerState,
   actions: Actions<T>,
   render: RenderFunction,
+  middleware: ActionMiddleware[],
 ): ActionHandler => {
+  const middlewareStack = middleware.reduce((m1, m2) => {
+    return (fn: PatchFunction) => m1(m2(fn));
+  }, (fn: PatchFunction) => fn);
+
   const patcher = (fn: PatchFunction<T>) => {
-    state.model = fn(state.model);
+    state.model = middlewareStack(fn)(state.model);
     setNextRender(state, () => render(handler));
   };
   const handler = actionHandlerFactory(patcher, actions);
   return handler;
 };
 
-const DEFAULT_OPTIONS = {
+const DEFAULT_OPTIONS: RunnerOptions = {
+  middleware: [],
   root: "#app",
 };
 
@@ -159,12 +140,17 @@ const runner = <T = any> (model: T, actions: Actions<T>, view: ViewFunction, opt
   const state: RunnerState<T> = {
     model,
     nextRenderId: null,
-    vnodes: is.str(opt.root) ? (document.querySelector(opt.root) as Element) : opt.root,
+    vnodes: is.str(opt.root) ? (document.querySelector(opt.root) as Element) : opt.root as Element | VNode,
   };
 
   // Prepare the engine
   const render = createRenderer(state, view);
-  const actionHandler = createActionHandler<T>(state, actions, render);
+  const actionHandler = createActionHandler<T>(
+    state,
+    actions,
+    render,
+    opt.middleware as ActionMiddleware[],
+  );
 
   // Start rendering
   render(actionHandler);
@@ -174,6 +160,7 @@ export {
   PatchFunction,
   ModelPatcher,
   ActionHandler,
+  ActionMiddleware,
   Actions,
   Props,
   ViewFunction,
