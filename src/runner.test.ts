@@ -100,34 +100,53 @@ describe("runner", () => {
     // FIXME: how do we test this anyway?
   });
 
-  it("Should pass an action handler that can generate a subaction", () => {
+  fit("Should pass an action handler that can generate a subaction", () => {
     const root = document.createElement("div");
+
+    // Sub-submodule
+
+    const subsuba = {
+      baz: jest.fn(),
+    };
+    const subsubview = ({act}) => {
+      return h("a", {props: {id: "baz"}, on: {click: act("baz")}});
+    };
 
     // Submodule
 
     const suba = {
       bar: jest.fn(),
+      delegateSubSub: (patcher, action, ...args) => {
+        subsuba[action](patcher, ...args);
+      },
     };
     const subview = ({act}) => {
       return h("div", [
-        h("a", {props: {href: "/foo"}, on: {click: act("bar")}}),
+        h("a", {props: {href: "/foo", id: "bar"}, on: {click: act("bar")}}),
+        subsubview({act: act.as("delegateSubSub")}),
       ]);
     };
 
     // Main module
 
     const a = {
-      foo: () => {
-        suba.bar();
+      delegateSub: (patcher, action, ...args) => {
+        suba[action](patcher, ...args);
       },
     };
     const view = ({act}) => {
+      // tslint:disable:no-console
       return h("div", [
-        subview({act: act.as("foo")}),
+        subview({act: act.as("delegateSub")}),
       ]);
     };
 
-    runner(undefined, {}, view, {root});
-    root.querySelector("a").dispatchEvent(new Event("click"));
+    runner(undefined, a, view, {root});
+
+    root.querySelector("#bar").dispatchEvent(new Event("click"));
+    expect(suba.bar).toHaveBeenCalled();
+
+    root.querySelector("#baz").dispatchEvent(new Event("click"));
+    expect(subsuba.baz).toHaveBeenCalled();
   });
 });

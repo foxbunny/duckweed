@@ -14,6 +14,7 @@ type ModelPatcher<T = any> = (fn: PatchFunction<T>) => void;
 
 interface ActionHandler {
   (...message: any[]): (...eventArgs: any[]) => any;
+  prefix: any[];
   as(...message: any[]): ActionHandler;
 }
 
@@ -74,15 +75,22 @@ const createRenderer = (state: RunnerState, view: ViewFunction) => {
   };
 };
 
-const actionHandlerFactory = (patcher: ModelPatcher, actions: Actions, baseArgs: any[] = []): ActionHandler => {
-  const handler = (action: any, ...args: any[]) => (...eventArgs: any[]) => {
+const actionHandlerFactory = (patcher: ModelPatcher, actions: Actions, prefix: any[] = []): ActionHandler => {
+  const handler = (...args: any[]) => (...eventArgs: any[]) => {
+    const [action, ...actionArgs] = prefix.concat(args, eventArgs);
     if (action == null) {
       return;
     }
     const actionFn = actions[action];
-    actionFn(patcher, ...baseArgs.concat(args), ...eventArgs);
+    if (!actionFn) {
+      throw Error(`No action found for message [${action}, ${actionArgs.join(", ")}]`);
+    }
+    actionFn(patcher, ...actionArgs);
   };
-  (handler as any).as = (...args: any[]) => actionHandlerFactory(patcher, actions, args);
+  (handler as any).as = (...args: any[]) => {
+    return actionHandlerFactory(patcher, actions, prefix.concat(args));
+  };
+  (handler as any).prefix = prefix;
   return handler as ActionHandler;
 };
 
