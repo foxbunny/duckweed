@@ -7,6 +7,9 @@ import {VNode} from "snabbdom/vnode";
 
 import {PathData} from "./modules/routeevents";
 
+const str = (s: any): s is string =>
+  typeof s === "string";
+
 const input = (target: any): target is HTMLInputElement =>
   target.tagName === "INPUT";
 
@@ -29,6 +32,7 @@ const pathData = (data: any): data is PathData =>
   typeof data === "object" && typeof data.pathname === "string";
 
 export {
+  str,
   input,
   checkbox,
   event,
