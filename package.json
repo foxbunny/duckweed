@@ -23,7 +23,7 @@
     "start": "jest --watch",
     "test": "jest",
     "build": "tsc",
-    "build:esm": "tsc -m es2015 --outDir esm",
+    "prepublish": "npm run build",
     "lint": "tslint -p . lib"
   },
   "jest": {
