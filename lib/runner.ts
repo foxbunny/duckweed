@@ -5,12 +5,26 @@
 
 import {VNode} from "snabbdom/vnode";
 
-import html, {ActionHandler, patch, setActionHandler, ViewFunction} from "./html";
+import html, {patch} from "./html";
 import * as is from "./is";
 
 type PatchFunction<T = any> = (model: T) => T;
 
 type ModelPatcher<T = any> = (fn: PatchFunction<T>) => void;
+
+interface ActionHandler {
+  (...message: any[]): (...eventArgs: any[]) => any;
+  as(...message: any[]): ActionHandler;
+}
+
+interface Props {
+  model: any;
+  act: ActionHandler;
+}
+
+type ViewFunction = (props: Props) => VNode;
+
+type RenderFunction = (handler: ActionHandler) => void;
 
 interface Actions<T = any> {
   [action: string]: (patch: ModelPatcher<T>, ...args: any[]) => Promise<void>;
@@ -39,7 +53,7 @@ const cancelNextRender = (state: RunnerState): void => {
 /**
  * Cancel the next-scheduled render, and reschedule another render
  */
-const setNextRender = (state: RunnerState, render: () => void): void => {
+const setNextRender = (state: RunnerState, render: RenderFunction): void => {
   cancelNextRender(state);
   state.nextRenderId = setTimeout(render);
 };
@@ -51,8 +65,9 @@ const setNextRender = (state: RunnerState, render: () => void): void => {
  * state using a specified view function.
  */
 const createRenderer = (state: RunnerState, view: ViewFunction) => {
-  return () => {
-    state.vnodes = patch(state.vnodes, html(view, {model: state.model}));
+  return (actionHandler: ActionHandler) => {
+    const props: Props = {model: state.model, act: actionHandler};
+    state.vnodes = patch(state.vnodes, html(view, props));
     state.nextRenderId = null;
   };
 };
@@ -85,6 +100,18 @@ const actionArgs = (userArgs: any[], eventCallbackArgs: any[]) => {
   return userArgs;
 };
 
+const actionHandlerFactory = (patcher: ModelPatcher, actions: Actions, baseArgs: any[] = []): ActionHandler => {
+  const handler = (action: any, ...args: any[]) => (...eventArgs: any[]) => {
+    if (action == null) {
+      return;
+    }
+    const actionFn = actions[action];
+    actionFn(patcher, ...actionArgs(baseArgs.concat(args), eventArgs));
+  };
+  (handler as any).as = (...args: any[]) => actionHandlerFactory(patcher, actions, args);
+  return handler as ActionHandler;
+};
+
 /**
  * Create an action handler
  *
@@ -99,19 +126,17 @@ const actionArgs = (userArgs: any[], eventCallbackArgs: any[]) => {
  * returned to the action handler which uses the original message to determine
  * which action handler will be invoked.
  */
-const createActionHandler = <T = any>(state: RunnerState, actions: Actions<T>, render: () => void): ActionHandler => {
+const createActionHandler = <T = any>(
+  state: RunnerState,
+  actions: Actions<T>,
+  render: RenderFunction,
+): ActionHandler => {
   const patcher = (fn: PatchFunction<T>) => {
     state.model = fn(state.model);
-    setNextRender(state, render);
+    setNextRender(state, () => render(handler));
   };
-
-  return (action: any, ...args: any[]) => (...eventArgs: any[]) => {
-    if (action == null) {
-      return;
-    }
-    const actionFn = actions[action];
-    actionFn(patcher, ...actionArgs(args, eventArgs));
-  };
+  const handler = actionHandlerFactory(patcher, actions);
+  return handler;
 };
 
 const DEFAULT_OPTIONS = {
@@ -139,20 +164,20 @@ const runner = <T = any> (model: T, actions: Actions<T>, view: ViewFunction, opt
   };
 
   // Prepare the engine
-
   const render = createRenderer(state, view);
   const actionHandler = createActionHandler<T>(state, actions, render);
-  setActionHandler(actionHandler);
 
   // Start rendering
-
-  render();
+  render(actionHandler);
 };
 
 export {
   PatchFunction,
   ModelPatcher,
+  ActionHandler,
   Actions,
+  Props,
+  ViewFunction,
   RunnerState,
   RunnerOptions,
   runner,

@@ -33,13 +33,6 @@ interface PropsBase {
 
 type ViewFunction<T = any> = (props?: T, children?: InlineChild) => VNode;
 
-type ActionHandler = (action?: any, ...args: any[]) => (e?: Event) => any;
-
-const EVENT_MODULES = ["on", "off", "hook", "keys"];
-
-// This is a default dummy action handler
-let actionHandler: ActionHandler = () => (e?: Event) => undefined;
-
 const patch = snabbdom.init([
   snabClass,
   styleModule,
@@ -79,11 +72,7 @@ const prepareProps = (props: GenericProps | null): GenericProps => {
     const [mod, sub] = prop.split("-");
     if (sub) {
       finalProps[mod] = finalProps[mod] || {};
-      if (EVENT_MODULES.includes(mod)) {
-        finalProps[mod][sub] = actionHandler(...props[prop]);
-      } else {
-        finalProps[mod][sub] = props[prop];
-      }
+      finalProps[mod][sub] = props[prop];
     } else if (prop === "key") {
       finalProps.key = props[prop];
     } else if (prop === "class") {
@@ -91,7 +80,7 @@ const prepareProps = (props: GenericProps | null): GenericProps => {
     } else if (prop === "style") {
       finalProps.style = props[prop];
     } else if (prop === "route") {
-      finalProps.route = actionHandler(...props[prop]);
+      finalProps.route = props[prop];
     } else {
       finalProps.props = finalProps.props || {};
       finalProps.props[prop] = props[prop];
@@ -126,8 +115,6 @@ const renderFunction = (func: ViewFunction, props: any, children: ChildVNodes): 
   return vnode;
 };
 
-const setActionHandler = (func: ActionHandler) => actionHandler = func;
-
 const html = (elm: string | ViewFunction, props: any, ...children: ChildVNodesArg): VNode => {
   if (typeof elm === "string") {
     return renderIntrinsic(elm, props, children);
@@ -143,8 +130,6 @@ export {
   GenericProps,
   PropsBase,
   ViewFunction,
-  ActionHandler,
-  setActionHandler,
   patch,
   html,
 };
