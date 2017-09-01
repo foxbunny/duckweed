@@ -1,4 +1,4 @@
-![Duckweed logo](./media/duckweed-logo-600.png)
+![Duckweed logo](./media/duckweed-logo.svg)
 
 Duckweed: JavaScript microframework for programming reactive interfaces using
 Model-Action-View architecture
@@ -85,7 +85,7 @@ mind at all.)
 As in most web UI architectures, the Duckweed architecture allows us to model a
 cycle between a rendered view, through events, to state updates.
 
-![Model-action-view diagram](./media/mav-diagram.png)
+![Model-action-view diagram](./media/mav-diagram.svg)
 
 The cycle is started by the runner based on the initial application state, **the
 model**.
