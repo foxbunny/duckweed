@@ -1,7 +1,9 @@
 ![Duckweed logo](./media/duckweed-logo.svg)
 
-Duckweed: JavaScript microframework for programming reactive interfaces using
-Model-Action-View architecture
+**Duckweed: JavaScript microframework for programming reactive interfaces using
+Model-Action-View architecture**
+
+![Travis build status](https://travis-ci.org/foxbunny/duckweed.svg?branch=master)
 
 Duckweed is inspired by [Elm](http://elm-lang.org/) and [Simon Friis
 Vindum's](https://github.com/paldepind) [Functional Frontend
