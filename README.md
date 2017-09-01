@@ -80,6 +80,34 @@ natural. (You can also use
 [Snabbdom-pragma](https://github.com/Swizz/snabbdom-pragma), and Duckweed won't
 mind at all.)
 
+# Model-action-view in a nutshell
+
+As in most web UI architectures, the Duckweed architecture allows us to model a
+cycle between a rendered view, through events, to state updates.
+
+![Model-action-view diagram](./media/mav-diagram.png)
+
+The cycle is started by the runner based on the initial application state, **the
+model**.
+
+A view is a function that translates the application state to VNODE. Its input
+is the model, and its output is a VNODE object, which specifies how the
+interface should be rendered, and also how events should be translated into
+messages.
+
+Once a view is rendered, it will react to user input, and various other events
+(hooks, navigation, etc). Whenever an event happens, a message is transmitted.
+The message consists of an address (action name), and arbitrary data.
+
+When a matching action is found, it receives the message's data, and it can act
+on it. Typically, an action modifies the application state by patching the
+model.
+
+In Duckweed, model patching is done by returning a modified copy of the model
+which is to replace the existing state.
+
+Once the state is modified, the cycle repeats.
+
 # Composition
 
 In Duckweed applications, models, actions, and views, are composed separately.

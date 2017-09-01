@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 108.74088 88.992058"
+   height="88.992058mm"
+   width="108.74088mm">
+  <defs
+     id="defs2">
+    <linearGradient
+       id="linearGradient5159">
+      <stop
+         id="stop5155"
+         offset="0"
+         style="stop-color:#ffcc00;stop-opacity:1;" />
+      <stop
+         id="stop5157"
+         offset="1"
+         style="stop-color:#d4aa00;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.17561674,0.56227222,-0.76079093,0.2376199,207.407,120.91898)"
+       r="51.167912"
+       fy="84.840485"
+       fx="-158.35692"
+       cy="84.840485"
+       cx="-158.35692"
+       id="radialGradient4493"
+       xlink:href="#linearGradient4522" />
+    <linearGradient
+       id="linearGradient4522">
+      <stop
+         style="stop-color:#8cc33a;stop-opacity:1"
+         offset="0"
+         id="stop4518" />
+      <stop
+         style="stop-color:#3f7c04;stop-opacity:1"
+         offset="1"
+         id="stop4520" />
+    </linearGradient>
+    <radialGradient
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-0.95888613,-0.51462538,0.41772229,-0.77832951,-102.33964,18.213133)"
+       r="30.546034"
+       fy="18.985952"
+       fx="-156.20721"
+       cy="18.985952"
+       cx="-156.20721"
+       id="radialGradient4503"
+       xlink:href="#linearGradient4522" />
+    <radialGradient
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.0634854,0,0,0.87628058,206.58463,28.290102)"
+       r="33.710247"
+       fy="72.782593"
+       fx="-78.378532"
+       cy="72.782593"
+       cx="-78.378532"
+       id="radialGradient4515"
+       xlink:href="#linearGradient4522" />
+    <radialGradient
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.3570747,0.06489803,-0.04068861,0.85088606,-26.620963,11.362568)"
+       r="13.53467"
+       fy="114.12057"
+       fx="84.248665"
+       cy="114.12057"
+       cx="84.248665"
+       id="radialGradient5161"
+       xlink:href="#linearGradient5159" />
+  </defs>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-44.182999,-36.507707)"
+     id="layer1">
+    <path
+       id="path4485"
+       d="M 81.408973,60.424266 C 85.988652,78.878607 111.99634,82.211369 122.47155,66.571167 135.05934,47.776774 126.65753,40.881625 111.3434,37.622382 99.353396,35.070595 74.580115,34.820935 81.408973,60.424266 Z"
+       style="opacity:1;fill:url(#radialGradient4493);fill-opacity:1;stroke:none;stroke-width:0.26458329;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <path
+       id="path4495"
+       d="M 79.479067,87.238737 C 76.961316,71.283812 65.578613,70.391117 57.607477,72.092974 c -8.889034,1.897805 -16.239441,1.331895 -12.365231,14.434413 0.841505,4.255026 7.183942,21.706793 20.806443,15.994133 13.622529,-5.712647 13.63302,-10.603821 13.430378,-15.282783 z"
+       style="opacity:1;fill:url(#radialGradient4503);fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <path
+       id="path4505"
+       d="m 114.78062,89.289207 c 7.78931,-5.777578 11.71799,-8.421358 21.43781,-6.77443 9.71982,1.646989 24.28898,15.907736 12.002,26.705993 -12.28694,10.79825 -23.54713,2.8628 -27.61227,-3.36227 -3.60935,-5.52715 -9.90323,-12.10678 -5.82754,-16.569293 z"
+       style="opacity:1;fill:url(#radialGradient4515);fill-opacity:1;stroke:none;stroke-width:0.26458329;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <text
+       id="text5113"
+       y="57.042294"
+       x="88.922722"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.20233107px;line-height:1.25;font-family:'Acherus Grotesque';-inkscape-font-specification:'Acherus Grotesque';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         style="fill:#ffffff;stroke-width:0.26458332"
+         y="57.042294"
+         x="88.922722"
+         id="tspan5111">MODEL</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.20233107px;line-height:1.25;font-family:'Acherus Grotesque';-inkscape-font-specification:'Acherus Grotesque';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       x="123.04196"
+       y="100.15135"
+       id="text5117"><tspan
+         id="tspan5115"
+         x="123.04196"
+         y="100.15135"
+         style="fill:#ffffff;stroke-width:0.26458332">VIEW</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.20233107px;line-height:1.25;font-family:'Acherus Grotesque';-inkscape-font-specification:'Acherus Grotesque';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       x="88.922722"
+       y="57.042294"
+       id="text5121"><tspan
+         id="tspan5119"
+         x="88.922722"
+         y="57.042294"
+         style="fill:#ffffff;stroke-width:0.26458332">MODEL</tspan></text>
+    <text
+       id="text5125"
+       y="88.865532"
+       x="48.517742"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.20233107px;line-height:1.25;font-family:'Acherus Grotesque';-inkscape-font-specification:'Acherus Grotesque';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         style="fill:#ffffff;stroke-width:0.26458332"
+         y="88.865532"
+         x="48.517742"
+         id="tspan5123">ACTION</tspan></text>
+    <path
+       style="opacity:1;fill:url(#radialGradient5161);fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 100.74208,107.37105 c -7.36031,-9.099779 -14.826541,-5.53606 -19.211967,-1.58021 -4.890425,4.41137 -9.707936,6.71928 -2.529832,13.53767 2.069632,2.36522 12.372296,11.01862 18.85094,2.49847 6.478669,-8.52015 4.713199,-11.59323 2.890859,-14.45593 z"
+       id="path5127" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:3.90353894px;line-height:1.25;font-family:'Acherus Grotesque';-inkscape-font-specification:'Acherus Grotesque';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#333333;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       x="77.38443"
+       y="114.47574"
+       id="text5133"><tspan
+         id="tspan5131"
+         x="77.38443"
+         y="114.47574"
+         style="fill:#333333;stroke-width:0.26458332">MESSGAGE</tspan></text>
+    <path
+       id="path5135"
+       d="m 126.84612,65.197138 c 2.43215,2.432153 5.53047,5.596611 6.46591,8.496484 2.43215,0 3.07561,-1.106481 3.07561,-1.106481 l -4.77076,6.454557 -6.92228,-4.30304 c 0,0 2.05797,0.467722 3.27405,-0.09354 0.40822,-2.41513 0.37418,-6.080381 -1.12253,-9.447976 z"
+       style="opacity:1;fill:#d40000;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <path
+       style="opacity:1;fill:#d40000;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 120.46797,110.94961 c -2.45173,2.41242 -5.64113,5.48506 -8.54846,6.39704 -0.0197,2.43207 1.08159,3.08445 1.08159,3.08445 l -6.4158,-4.82277 4.35884,-6.88728 c 0,0 -0.48433,2.05413 0.067,3.2747 2.41175,0.42773 6.07716,0.42331 9.45675,-1.04614 z"
+       id="path5137" />
+    <path
+       id="path5139"
+       d="m 73.217757,114.59606 c -3.32354,-0.88591 -7.590539,-2.0717 -9.853249,-4.1124 -2.104741,1.21878 -2.107064,2.49879 -2.107064,2.49879 l 0.893939,-7.97636 8.146729,0.25479 c 0,0 -2.015304,0.62656 -2.786443,1.7216 0.857018,2.29456 2.723234,5.44931 5.706048,7.61351 z"
+       style="opacity:1;fill:#d40000;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <path
+       style="opacity:1;fill:#d40000;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="m 64.904172,68.186046 c 1.543432,-3.073853 3.572385,-7.010441 6.030681,-8.810746 -0.765173,-2.308651 -2.01795,-2.571293 -2.01795,-2.571293 l 7.627765,2.497727 -1.906595,7.924582 c 0,0 -0.203526,-2.10062 -1.118815,-3.07838 -2.420915,0.372363 -5.889319,1.557853 -8.615009,4.038085 z"
+       id="path5141" />
+  </g>
+</svg>
