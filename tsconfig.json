@@ -27,10 +27,10 @@
     "allowSyntheticDefaultImports": true
   },
   "include": [
-    "lib/**/*.ts"
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules",
-    "lib/**/*.test.ts"
+    "src/**/*.test.ts"
   ]
 }
