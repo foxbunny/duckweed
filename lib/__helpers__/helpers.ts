@@ -5,17 +5,35 @@
 
 import {PatchFunction} from "../runner";
 
+/**
+ * The Promise version of setTimeout, for use in `async` functions
+ */
 const pause = (delay: number = 0): Promise<void> => {
   return new Promise((res) => {
     setTimeout(res, delay);
   });
 };
 
+/**
+ * The middleware that captures model states before and after an update
+ *
+ * Simply install this middleware by adding `modelSnapshotter.middleware` to the
+ * list of runner middleware functions.
+ *
+ * The complete list of snapshots can be obtained by inspecting the `snapshots`
+ * property. The current state of the model is available by accessing the
+ * `current` property.
+ *
+ * The snapshotter history can be cleared by calling the `clear()` method.
+ */
 const modelSnapshotter = (() => {
   let modelSnapshots: Array<[any, any]> = [];
   return {
     get snapshots() {
       return modelSnapshots;
+    },
+    get current() {
+      return modelSnapshots[modelSnapshots.length][1];
     },
     clear() {
       modelSnapshots = [];
