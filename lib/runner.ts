@@ -89,7 +89,7 @@ const actionArgs = (userArgs: any[], eventCallbackArgs: any[]) => {
     // This is mostly for hooks. We add the vnode objects to args.
     return userArgs.concat(eventCallbackArgs);
   } else if (is.changeEvent(first) && is.checkbox(first.target)) {
-    return userArgs.concat(first.target.checked);
+    return userArgs.concat(first.target.checked, first.target.value);
   } else if (is.inputEvent(first) && is.input(first.target)) {
     // For convenience, process events and extract implied arguments
     first.preventDefault();
