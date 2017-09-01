@@ -6,7 +6,7 @@
 import {VNode} from "snabbdom/vnode";
 
 import html, {ActionHandler, patch, setActionHandler, ViewFunction} from "./html";
-import {PathData} from "./modules/routeevents";
+import * as is from "./is";
 
 type PatchFunction<T = any> = (model: T) => T;
 
@@ -21,27 +21,6 @@ interface RunnerState<T = any> {
   model: T;
   nextRenderId: null | number;
 }
-
-const isInput = (target: any): target is HTMLInputElement =>
-  target.tagName === "INPUT";
-
-const isCheckbox = (target: any): target is HTMLInputElement =>
-  target.tagName === "INPUT" && target.type === "checkbox";
-
-const isEvent = (event: any): event is Event =>
-  event instanceof Event;
-
-const isChangeEvent = (event: any): event is Event =>
-  isEvent(event) && event.type === "change";
-
-const isInputEvent = (event: any): event is Event =>
-  isEvent(event) && event.type === "input";
-
-const isVNnode = (vnode: any): vnode is VNode =>
-  typeof vnode === "object" && "sel" in vnode;
-
-const isPathData = (data: any): data is PathData =>
-  typeof data === "object" && typeof data.pathname === "string";
 
 /**
  * Clears the timer if one was set by the patch function.
@@ -87,16 +66,16 @@ const createRenderer = (state: RunnerState, view: ViewFunction) => {
  */
 const actionArgs = (userArgs: any[], eventCallbackArgs: any[]) => {
   const first = eventCallbackArgs[0];
-  if (isVNnode(first)) {
+  if (is.vnode(first)) {
     // This is mostly for hooks. We add the vnode objects to args.
     return userArgs.concat(eventCallbackArgs);
-  } else if (isChangeEvent(first) && isCheckbox(first.target)) {
+  } else if (is.changeEvent(first) && is.checkbox(first.target)) {
     return userArgs.concat(first.target.checked);
-  } else if (isInputEvent(first) && isInput(first.target)) {
+  } else if (is.inputEvent(first) && is.input(first.target)) {
     // For convenience, process events and extract implied arguments
     first.preventDefault();
     return userArgs.concat(first.target.value);
-  } else if (isPathData(first)) {
+  } else if (is.pathData(first)) {
     return userArgs.concat(first);
   }
   return userArgs;
