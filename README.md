@@ -134,10 +134,9 @@ const rootView = ({model, act}) => {
 ```
 
 So the part where we use `<inputView>` as a JSX element is not that weird.
-However, we see something new, which is the `act.as()` business. The `act.as()`
+However, we see something new, the `act.as()` business. The `act.as()`
 function creates a delegated `act()` function. Without going into too much
-detail, it basically let's the parent view 'own' the messages in the child
-views.
+detail, it basically lets the parent view 'own' the messages in the child views.
 
 Why would we want the parent to own the child messages? From the perspective of
 the runner, there is no such thing as a 'child view' and 'child actions'.
@@ -150,8 +149,8 @@ by the parent.
 Since Duckweed matches on the first argument we pass to `act()`, the `act.as()`
 allows us to hijack the first argument by setting it before passing the `act()`
 on to the child view. Any messages that child passes to this hijacked `act()`
-will become part for the parent's original message and passed to actions as
-arguments.
+will become part for the parent's original message and passed to *parent*
+actions as arguments. The parent action will then decide how to handle them.
 
 ## Actions composition
 
