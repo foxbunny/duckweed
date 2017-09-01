@@ -66,8 +66,7 @@ const setNextRender = (state: RunnerState, render: RenderFunction): void => {
  */
 const createRenderer = (state: RunnerState, view: ViewFunction) => {
   return (actionHandler: ActionHandler) => {
-    const props: Props = {model: state.model, act: actionHandler};
-    state.vnodes = patch(state.vnodes, view(props));
+    state.vnodes = patch(state.vnodes, view({model: state.model, act: actionHandler} as Props));
     state.nextRenderId = null;
   };
 };
