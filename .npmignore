@@ -1,4 +1,14 @@
+# Images
 media
-node_modules
+
+# Tests
 *.test.ts
+
+# Package management
 yarn.lock
+node_modules
+
+# Dev stuff
+tslint.json
+tsconfig.json
+.editorconfig
