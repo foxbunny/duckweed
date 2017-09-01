@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`events Should handle many events automatically 1`] = `
+Array [
+  Array [
+    "my value",
+  ],
+  Array [
+    true,
+    "my value",
+  ],
+]
+`;
