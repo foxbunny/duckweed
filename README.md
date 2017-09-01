@@ -93,14 +93,18 @@ const inputModel = () => ({
   value: 0,
 });
 
-const rootModel = () => ({
+const rootModel = {
   sum: 0,
   inputs: [
     inputModel(),
     inputModel(),
   ]
-});
+};
 ```
+
+Note that we've used a function for the `inputModel`, and an POJO for the
+`rootModel`. This is because `rootModel` doesn't need to do anything dynamic,
+but for `inputModel` we want to generate a fresh object for multiple inputs.
 
 There aren't any rules about what you can or cannot do. Duckweed will treat
 everything as a single object (the root model that ends up being passed to the
@@ -225,6 +229,21 @@ the input actions to handle hooks, and other types of events that have more than
 one argument, or input messages may have their own arguments. For this
 particular case, we know that there's just one possible argument, so this code
 works.
+
+## Integrating the app
+
+To integrate all of our composition work, we just need to pass the root stuff
+into the runner.
+
+```javascript
+duckweed.runner(rootModel, rootActions, rootView);
+```
+
+## It's fractal
+
+Composition in Duckweed is fractal. The pattern you saw for composing root and
+input can be applied any levels deep, and each level can behave as though *they*
+are the root.
 
 # I want class-based components!
 
