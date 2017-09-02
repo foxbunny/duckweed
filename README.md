@@ -16,6 +16,9 @@ a simple API, and functions happen to be a good step in that direction.
 Duckweed is written in [TypeScript](https://www.typescriptlang.org), and uses
 [Snabbdom](https://github.com/snabbdom/snabbdom) under the hood.
 
+Although Duckweed is small (only 7KB min+gz), it includes state managent,
+transitions, routing events, and the full power of Snabbdom.
+
 # Installation
 
 To install Duckweed, use:
@@ -391,9 +394,6 @@ GitHub](https://github.com/foxbunny/duckweed-tasks). You can see it in action
 # Benchmarks
 
 It's... erm... fast enough. :)
-
-The build size is (as of this writing) around 4KB gzipped for Duckweed itself,
-and 11KB gzipped combined with other dependencies (Snabbdom, query-string, etc).
 
 # Under construction
 
