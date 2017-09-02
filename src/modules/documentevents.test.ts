@@ -8,7 +8,7 @@ import docevents from "./documentevents";
 import * as snabbdom from "snabbdom";
 import h from "snabbdom/h";
 
-import {pause} from "../__helpers__/helpers";
+import {pause} from "../__helpers__";
 
 const patch = snabbdom.init([docevents]);
 

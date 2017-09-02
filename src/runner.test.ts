@@ -10,7 +10,7 @@ import props from "snabbdom/modules/props";
 
 import runner from "./runner";
 
-import {modelSnapshotter, pause} from "./__helpers__/helpers";
+import {modelSnapshotter, pause} from "./__helpers__";
 
 const patch = snabbdom.init([eventlisteners, props]);
 
