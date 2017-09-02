@@ -368,6 +368,9 @@ duckweed is pretty awesome.
 
 It's... erm... fast enough. :)
 
+The build size is (as of this writing) around 4KB gzipped for Duckweed itself,
+and 11KB gzipped combined with other dependencies (Snabbdom, query-string, etc).
+
 # Under construction
 
 Duckweed is still in very very early stages of development. A proof-of-concept
