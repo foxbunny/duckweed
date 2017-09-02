@@ -10,3 +10,4 @@
 *.js.map
 /coverage
 *.tgz
+!/dist/*.js*
