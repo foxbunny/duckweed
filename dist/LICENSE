@@ -1,0 +1,7 @@
+Files in the `dist` folder include Snabbdom[1] and query-string[2] packages.
+
+These files are distributed under the terms of the MIT license. License files
+for both packages are found in the `dist` folder.
+
+[1] https://github.com/snabbdom/snabbdom
+[2] https://github.com/sindresorhus/query-string
