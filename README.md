@@ -124,7 +124,27 @@ Once the state is modified, the cycle repeats.
 
 # Composition
 
+For our discussion of this topic, we'll call the model-actions-views triplet a
+'model'. Although the usual pattern is to have models that are saved in a
+physical JavaScript model, they don't need to be colocated in a single file. The
+'model' we talk about is simply a concept of having related models, actions, and
+views.
+
 In Duckweed applications, models, actions, and views, are composed separately.
+We group related models, actions, and views in modules, and we treat modules as
+a unit of reusable code.
+
+A common theme in the composition pattern discussed here is that children
+generally don't know anything about the parent. All modules should be designed
+as if they would be used as the root module. The flip side is that the parent
+modules will have full and absolute component over children, including the
+ability to swap out their models and deny execution of their actions. (If this
+sounds scary, you probably did not have a happy childhood.) Another way to look
+at it is that the parents are responsible for their children and their
+well-being. (There, trauma cured!)
+
+This pattern is simply a recommendation, however, and not something imposed by
+the Duckweed API. You are free to explore and come up with new patterns!
 
 ## Model composition
 
@@ -144,13 +164,13 @@ const rootModel = {
 };
 ```
 
-Note that we've used a function for the `inputModel`, and an POJO for the
+Note that we've used a function for the `inputModel`, and a POJO for the
 `rootModel`. This is because `rootModel` doesn't need to do anything dynamic,
 but for `inputModel` we want to generate a fresh object for multiple inputs.
 
-There aren't any rules about what you can or cannot do. Duckweed will treat
-everything as a single object (the root model that ends up being passed to the
-runner).
+Even though we have defined two separate models, Duckweed will only care about
+the root model, and will treat everything as a single big object. This is
+important to keep in mind once we start working with actions.
 
 ## View composition
 
@@ -175,28 +195,29 @@ const rootView = ({model, act}) => {
 };
 ```
 
-So the part where we use `<inputView>` as a JSX element is not that weird.
-However, we see something new, the `act.as()` business. The `act.as()`
-function creates a delegated `act()` function. Without going into too much
-detail, it basically lets the parent view 'own' the messages in the child views.
+The root view takes two props, the `model` and `act`. The `model` prop is the
+current state of the model. The `act` object is a function used to dispatch
+messages. From the code snippet, we don't really know what action the root view
+may support, and that's kind of the point. View is thusly decoupled from the
+actions.
 
-Why would we want the parent to own the child messages? From the perspective of
-the runner, there is no such thing as a 'child view' and 'child actions'.
-There's only 'view' and 'actions'--the ones we pass to the runner. The concept
-of a 'child' anything is merely something we, the developers, came up with. As
-far as Duckweed is concerned, all messages must be handled through the actions
-that were passed to the runner. This is why any 'child' messages must be owned
-by the parent.
+The root view uses the input view as one of the elements in order to render the
+inputs. The input view also acceps the `model` and `act` props, and the
+responsibility of passing them is root's. We have two inputs, and each is given
+its own piece of the root's model. The `act.as()` call is used to pass a
+modified version of `act` that is specific to the inputs.
 
-Since Duckweed matches on the first argument we pass to `act()`, the `act.as()`
-allows us to hijack the first argument by setting it before passing the `act()`
-on to the child view. Any messages that child passes to this hijacked `act()`
-will become part for the parent's original message and passed to *parent*
-actions as arguments. The parent action will then decide how to handle them.
+The `act.as()` bit requires further explanation. Suppose that input wants to
+send a message `update`. It is given an `act` object that was created by
+`act.as("updateInput", 1)`. When the input sends the `update` message, the
+modified `act` will translate that to `"updateInput", 1, "update"`. The first
+element in the message is the message's address, which belongs to the root.
+Instead of directly invoking the `update` action for the input, Duckweed will,
+instead, invoke the `updateInput` action for the root, and the action will
+receive `1, "update"` as its arguments. The root's action will then decide what
+to do with those.
 
 ## Actions composition
-
-In the following paragraph, we'll see how to handle those.
 
 The actions composition can a bit more tricky. They are composed by delegation
 and scoped patchers.
@@ -246,16 +267,16 @@ const rootActions = {
 };
 ```
 
-OK, that was a big one so let's break it down.
+Let's break it down.
 
 Take a look at the arguments. As we discussed in the section about view
-composition, we are capturing all messages from the input views. `inputId` was
-passed to `act.as()` along with the `updateInput` message, and `inputAction`is
-the captured message from the input view. The event object, `e`, comes from the
-`input` event. This is automatically captured by `act()` and passed onto our
-actions.
+composition, we are capturing all messages from the input views and handling
+them in the root's `updateInput` action. `inputId` was passed to `act.as()`
+along with the `"updateInput"` address, and `inputAction`is the captured message
+from the input view. The event object, `e`, comes from the `input` event. This
+is automatically captured by `act()` and passed onto our actions.
 
-Next, we create a function that behaves like a patcher, but uses the actual
+We begin by creating a function that behaves like a patcher, but uses the actual
 patcher to patch only a subset of the model that belongs to the input. When this
 scoped patcher is passed to an input action, it won't know the difference and it
 will happily patch the model it should be managing. We use the `inputId`
@@ -265,7 +286,7 @@ Finally, we pass the scoped patcher and the event object to the correct action
 in the input actions (determined by `inputAction` argument).
 
 As a side note, it would be more correct to capture *all* arguments following
-the `inputAction` argument using a reset spread. We may later decide to enhance
+the `inputAction` argument using a rest spread. We may later decide to enhance
 the input actions to handle hooks, and other types of events that have more than
 one argument, or input messages may have their own arguments. For this
 particular case, we know that there's just one possible argument, so this code
