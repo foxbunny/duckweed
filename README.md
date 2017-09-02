@@ -26,6 +26,11 @@ npm install duckweed@beta
 
 Currently, only beta releases are available.
 
+# Take it for a spin
+
+This [fiddle](https://jsfiddle.net/foxbunny/e0pjybw7/) contains a small counter
+example that you can fork and play with.
+
 # Hello Duckweed!
 
 This is the simplest possible application you can create with Duckweed:
