@@ -374,6 +374,12 @@ of the Earth in a single month. It is also an invaluable water purifier, and
 being studied as a potential source of clean energy. What I'm trying to say is,
 duckweed is pretty awesome.
 
+# Demo app
+
+A proof-of-concept application can be found [on
+GitHub](https://github.com/foxbunny/duckweed-tasks). You can see it in action
+[here](https://foxbunny.github.io/duckweed-tasks/).
+
 # Benchmarks
 
 It's... erm... fast enough. :)
@@ -383,10 +389,8 @@ and 11KB gzipped combined with other dependencies (Snabbdom, query-string, etc).
 
 # Under construction
 
-Duckweed is still in very very early stages of development. A proof-of-concept
-application can be found [on GitHub](https://github.com/foxbunny/selm). The
-current Duckweed code base is an effort to factor out the reusable parts from
-that repository, clean it up, write documentation...
+Duckweed is still in very very early stages of development. Don't expect it to
+be production-ready.
 
 # License
 
