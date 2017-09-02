@@ -4,6 +4,7 @@
 Model-Action-View architecture**
 
 ![Travis build status](https://travis-ci.org/foxbunny/duckweed.svg?branch=master)
+![Coverage status](https://codecov.io/gh/foxbunny/duckweed/branch/master/graph/badge.svg)
 
 Duckweed is inspired by [Elm](http://elm-lang.org/) and [Simon Friis
 Vindum's](https://github.com/paldepind) [Functional Frontend
