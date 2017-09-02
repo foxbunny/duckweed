@@ -181,3 +181,102 @@ Object {
   "text": undefined,
 }
 `;
+
+exports[`html with jsx Should handle arrays 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": undefined,
+      "data": Object {},
+      "elm": undefined,
+      "key": undefined,
+      "sel": "li",
+      "text": 1,
+    },
+    Object {
+      "children": undefined,
+      "data": Object {},
+      "elm": undefined,
+      "key": undefined,
+      "sel": "li",
+      "text": 2,
+    },
+    Object {
+      "children": undefined,
+      "data": Object {},
+      "elm": undefined,
+      "key": undefined,
+      "sel": "li",
+      "text": 3,
+    },
+  ],
+  "data": Object {},
+  "elm": undefined,
+  "key": undefined,
+  "sel": "ul",
+  "text": undefined,
+}
+`;
+
+exports[`html with jsx Should handle children 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": undefined,
+      "data": Object {},
+      "elm": undefined,
+      "key": undefined,
+      "sel": "span",
+      "text": "Foo",
+    },
+  ],
+  "data": Object {},
+  "elm": undefined,
+  "key": undefined,
+  "sel": "div",
+  "text": undefined,
+}
+`;
+
+exports[`html with jsx Should handle mixed text/vnode children 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": undefined,
+      "data": undefined,
+      "elm": undefined,
+      "key": undefined,
+      "sel": undefined,
+      "text": "go to",
+    },
+    Object {
+      "children": undefined,
+      "data": Object {
+        "props": Object {
+          "href": "#foo",
+        },
+      },
+      "elm": undefined,
+      "key": undefined,
+      "sel": "a",
+      "text": "foo",
+    },
+  ],
+  "data": Object {},
+  "elm": undefined,
+  "key": undefined,
+  "sel": "p",
+  "text": undefined,
+}
+`;
+
+exports[`html with jsx Should render JSX just fine 1`] = `
+Object {
+  "children": undefined,
+  "data": Object {},
+  "elm": undefined,
+  "key": undefined,
+  "sel": "div",
+  "text": "Foo",
+}
+`;

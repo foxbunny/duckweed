@@ -73,3 +73,39 @@ describe("html", () => {
     expect(vn).toMatchSnapshot();
   });
 });
+
+describe("html with jsx", () => {
+  it("Should render JSX just fine", () => {
+    const vn = (
+      <div>Foo</div>
+    );
+    expect(vn).toMatchSnapshot();
+  });
+
+  it("Should handle children", () => {
+    const vn = (
+      <div><span>Foo</span></div>
+    );
+    expect(vn).toMatchSnapshot();
+  });
+
+  it("Should handle mixed text/vnode children", () => {
+    const vn = (
+      <p>
+        go to
+        <a href="#foo">foo</a>
+      </p>
+    );
+    expect(vn).toMatchSnapshot();
+  });
+
+  it("Should handle arrays", () => {
+    const a = [1, 2, 3];
+    const vn = (
+      <ul>
+        {a.map((x) => <li>{x}</li>)}
+      </ul>
+    );
+    expect(vn).toMatchSnapshot();
+  });
+});

@@ -94,21 +94,22 @@ const prepareProps = (props: GenericProps | null): VNodeData => {
 };
 
 const renderIntrinsic = (elm: string, props: GenericProps = {}, children: ChildVNodesArg = []): VNode => {
-  const finalChildren: string | ChildVNodes = children.length && typeof children[0] === "string"
-    ? children[0] as string
+  // FIXME: We're messing with any a lot here
+  children = (children.length === 1
+    ? children[0]
     : children.reduce((arr, c) => {
-        if (isInlineChild(c)) {
-          // Case where we have something like `{props.__inner}` somewhere in the
-          // render functions.
-          return arr.concat(c.__vnodes);
-        }
-        if (Array.isArray(c)) {
-          // Case where we have something like `{arr.map(() => ...)}`
-          return arr.concat(c);
-        }
-        return arr.concat([c as VNode]);
-      }, [] as ChildVNodes);
-  return snab(elm, prepareProps(props), finalChildren as any);
+      if (isInlineChild(c)) {
+        // Case where we have something like `{props.__inner}` somewhere in the
+        // render functions.
+        return arr.concat(c.__vnodes);
+      }
+      if (Array.isArray(c)) {
+        // Case where we have something like `{arr.map(() => ...)}`
+        return arr.concat(c);
+      }
+      return arr.concat([c as VNode]);
+    }, [] as ChildVNodes)) as any;
+  return snab(elm, prepareProps(props), children as any);
 };
 
 const renderFunction = (func: ViewFunction, props: any = {}, children: ChildVNodes = []): VNode => {
