@@ -21,8 +21,9 @@
   },
   "scripts": {
     "start": "jest --watch",
-    "test": "jest --coverage",
+    "test": "npm run lint && jest --coverage",
     "build": "tsc",
+    "clean": "git clean -xdf",
     "prepublish": "npm run build",
     "lint": "tslint -p . lib"
   },
