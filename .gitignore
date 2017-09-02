@@ -8,3 +8,4 @@
 *.js
 *.d.ts
 *.js.map
+/coverage

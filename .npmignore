@@ -3,6 +3,7 @@ media
 
 # Tests
 *.test.ts
+coverage
 
 # Package management
 yarn.lock

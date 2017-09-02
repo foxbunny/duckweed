@@ -21,7 +21,7 @@
   },
   "scripts": {
     "start": "jest --watch",
-    "test": "jest",
+    "test": "jest --coverage",
     "build": "tsc",
     "prepublish": "npm run build",
     "lint": "tslint -p . lib"
