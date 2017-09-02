@@ -8,6 +8,7 @@ coverage
 # Package management
 yarn.lock
 node_modules
+*.tgz
 
 # Dev stuff
 tslint.json

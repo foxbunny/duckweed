@@ -9,3 +9,4 @@
 *.d.ts
 *.js.map
 /coverage
+*.tgz
