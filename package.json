@@ -14,17 +14,28 @@
   "devDependencies": {
     "@types/jest": "^20.0.8",
     "@types/query-string": "^5.0.0",
+    "@types/webpack": "^3.0.10",
+    "cross-env": "^5.0.5",
     "jest": "^20.0.4",
     "ts-jest": "^20.0.13",
+    "ts-loader": "^2.3.4",
+    "ts-node": "^3.3.0",
     "tslint": "^5.7.0",
-    "typescript": "^2.4.2"
+    "tslint-loader": "^3.5.3",
+    "typescript": "^2.4.2",
+    "uglifyjs-webpack-plugin": "^0.4.6",
+    "webpack": "^3.5.5"
   },
   "scripts": {
     "start": "jest --watch",
     "test": "npm run lint && jest --coverage",
     "build": "tsc",
+    "build:umd": "cross-env NODE_ENV=production webpack",
+    "build:min": "cross-env NODE_ENV=production webpack --env.minify yes",
+    "build:dist": "npm run build:umd && npm run build:min",
     "clean": "git clean -xdf",
-    "prepublish": "npm run build",
+    "rebuild": "npm run clean && npm i && npm run build && npm run build:dist",
+    "npmjs": "npm run rebuild && npm publish",
     "lint": "tslint -p . lib"
   },
   "jest": {
