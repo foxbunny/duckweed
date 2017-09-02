@@ -222,19 +222,7 @@ to do with those.
 The actions composition can a bit more tricky. They are composed by delegation
 and scoped patchers.
 
-```javascript
-/**
- * Return an array where the element at specified index is modified by
- * the function
- */
-const updateAt = (fn, index, arr) => {
-  const copy = [].concat(arr);
-  copy[index] = fn(copy[index]);
-  return copy;
-}
-```
-
-Now let's see how to compose actions:
+Now let's see that in action (pun intentional):
 
 ```javascript
 const inputActions = {
@@ -248,18 +236,9 @@ const inputActions = {
 
 const rootActions = {
   updateInput(patch, inputId, inputAction, e) {
-    // Define a scoped patcher
-    const scoped = (fn) => patch((model) => {
-      const updated = {
-        ...model,
-        inputs: updateAt(fn, inputId, model.inputs),
-      };
-      // After letting the input actions do whatever they want to the
-      // input models, we also want to update the sum. We can just
-      // assign to the property on the `updated` object because it's a
-      // copy.
-      updated.sum = updated.inputs.reduce((x, y) => x + y, 0)
-      return updated;
+    const scoped = patch.as(["inputs", inputId], (model) => ({
+      ...model,
+      sum: updated.inputs.reduce((x, y) => x + y, 0),
     });
     // Delegate to input actions
     inputActions[inputAction](scoped, e);
@@ -276,13 +255,16 @@ along with the `"updateInput"` address, and `inputAction`is the captured message
 from the input view. The event object, `e`, comes from the `input` event. This
 is automatically captured by `act()` and passed onto our actions.
 
-We begin by creating a function that behaves like a patcher, but uses the actual
-patcher to patch only a subset of the model that belongs to the input. When this
-scoped patcher is passed to an input action, it won't know the difference and it
-will happily patch the model it should be managing. We use the `inputId`
-argument to determine the actual model.
+We begin by creating a `scoped` patcher, which is a patcher that operates on a
+particular subtree of the model. The subtree is specified as an array of keys
+and/or array indices. In our example, we are going down into the `inputs` key,
+which is an array, and then looking up a particular index at `inputId`. The
+`scoped` patcher will only patch this particular array element in the model. The
+callback function we pass to `patch.as()` will be triggered every time an input
+action invokes the patcher, and will receive the model at the caller's scope,
+which the caller can further modify.
 
-Finally, we pass the scoped patcher and the event object to the correct action
+We pass the scoped patcher and the event object to the correct action
 in the input actions (determined by `inputAction` argument).
 
 As a side note, it would be more correct to capture *all* arguments following

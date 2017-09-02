@@ -149,4 +149,77 @@ describe("runner", () => {
     root.querySelector("#baz").dispatchEvent(new Event("click"));
     expect(subsuba.baz).toHaveBeenCalled();
   });
+
+  it("Should provide a way to create scoped patchers", async () => {
+    const root = document.createElement("div");
+
+    const counterModel = () => ({
+      count: 0,
+    });
+
+    const counterActions = {
+      increment(patcher) {
+        patcher((model) => ({
+          count: model.count + 1,
+        }));
+      },
+    };
+
+    const counterView = ({model, act, id}) =>
+      h("div", {props: {id}, on: {click: act("increment")}}, `count: ${model.count}`);
+
+    const listModel = () => ({
+      counters: [
+        counterModel(),
+        counterModel(),
+        counterModel(),
+        counterModel(),
+      ],
+      total: 0,
+    });
+
+    const listActions = {
+      updateCounter(patcher, counterId, counterAction, ...args) {
+        const sub = patcher.as(["counters", counterId], (model) => ({
+          ...model,
+          total: model.counters.reduce((s, c) => s + c.count, 0),
+        }));
+        counterActions[counterAction](sub, ...args);
+      },
+    };
+
+    const listView = ({model, act}) => (
+      h("div", model.counters.map((c, id) => counterView({
+        act: act.as("updateCounter", id),
+        id: `counter-${id}`,
+        model: c,
+      })).concat(h("div", `total: ${model.total}`)))
+    );
+
+    const rootModel = () => ({
+      list: listModel(),
+    });
+
+    const rootActions = {
+      updateList(patcher, listAction, ...args) {
+        const scoped = patcher.as(["list"]);
+        listActions[listAction](scoped, ...args);
+      },
+    };
+
+    const rootView = ({model, act}) => (
+      listView({model: model.list, act: act.as("updateList")})
+    );
+
+    runner(rootModel(), rootActions, rootView, {root, middleware: [modelSnapshotter.middleware]});
+
+    root.querySelector("#counter-0").dispatchEvent(new Event("click"));
+    await pause();
+    root.querySelector("#counter-1").dispatchEvent(new Event("click"));
+    await pause();
+    root.querySelector("#counter-2").dispatchEvent(new Event("click"));
+    await pause();
+    expect(modelSnapshotter.current.list.total).toBe(3);
+    expect(modelSnapshotter.snapshots).toMatchSnapshot();
+  });
 });

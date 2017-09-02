@@ -6,6 +6,131 @@ exports[`runner Should pass the model to the view as props 1`] = `
 </div>
 `;
 
+exports[`runner Should provide a way to create scoped patchers 1`] = `
+Array [
+  Array [
+    Object {
+      "list": Object {
+        "counters": Array [
+          Object {
+            "count": 0,
+          },
+          Object {
+            "count": 0,
+          },
+          Object {
+            "count": 0,
+          },
+          Object {
+            "count": 0,
+          },
+        ],
+        "total": 0,
+      },
+    },
+    Object {
+      "list": Object {
+        "counters": Array [
+          Object {
+            "count": 1,
+          },
+          Object {
+            "count": 0,
+          },
+          Object {
+            "count": 0,
+          },
+          Object {
+            "count": 0,
+          },
+        ],
+        "total": 1,
+      },
+    },
+  ],
+  Array [
+    Object {
+      "list": Object {
+        "counters": Array [
+          Object {
+            "count": 1,
+          },
+          Object {
+            "count": 0,
+          },
+          Object {
+            "count": 0,
+          },
+          Object {
+            "count": 0,
+          },
+        ],
+        "total": 1,
+      },
+    },
+    Object {
+      "list": Object {
+        "counters": Array [
+          Object {
+            "count": 1,
+          },
+          Object {
+            "count": 1,
+          },
+          Object {
+            "count": 0,
+          },
+          Object {
+            "count": 0,
+          },
+        ],
+        "total": 2,
+      },
+    },
+  ],
+  Array [
+    Object {
+      "list": Object {
+        "counters": Array [
+          Object {
+            "count": 1,
+          },
+          Object {
+            "count": 1,
+          },
+          Object {
+            "count": 0,
+          },
+          Object {
+            "count": 0,
+          },
+        ],
+        "total": 2,
+      },
+    },
+    Object {
+      "list": Object {
+        "counters": Array [
+          Object {
+            "count": 1,
+          },
+          Object {
+            "count": 1,
+          },
+          Object {
+            "count": 1,
+          },
+          Object {
+            "count": 0,
+          },
+        ],
+        "total": 3,
+      },
+    },
+  ],
+]
+`;
+
 exports[`runner Should render the initial view 1`] = `
 <div>
   Hello, root

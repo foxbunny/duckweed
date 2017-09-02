@@ -10,7 +10,16 @@ import * as is from "./is";
 
 type PatchFunction<T = any> = (model: T) => T;
 
-type ModelPatcher<T = any> = (fn: PatchFunction<T>) => void;
+type Scope = Array<string | number>;
+
+interface ModelPatcher<T = any> {
+  (fn: PatchFunction<T>): void;
+  as<S = any>(scope: Scope): ModelPatcher<S>;
+}
+
+interface Actions<T = any> {
+  [action: string]: (patch: ModelPatcher<T>, ...args: any[]) => void | Promise<void>;
+}
 
 interface ActionHandler {
   (...message: any[]): (...eventArgs: any[]) => any;
@@ -27,11 +36,7 @@ type ViewFunction = (props: Props) => VNode;
 
 type RenderFunction = (handler: ActionHandler) => void;
 
-type ActionMiddleware = (fn: PatchFunction) => PatchFunction;
-
-interface Actions<T = any> {
-  [action: string]: (patch: ModelPatcher<T>, ...args: any[]) => void | Promise<void>;
-}
+type PatchMiddleware = (fn: PatchFunction) => PatchFunction;
 
 interface RunnerState<T = any> {
   vnodes: Element | VNode;
@@ -41,7 +46,7 @@ interface RunnerState<T = any> {
 
 interface RunnerOptions {
   root?: string | Element | VNode;
-  middleware?: ActionMiddleware[];
+  middleware?: PatchMiddleware[];
 }
 
 /**
@@ -73,6 +78,63 @@ const createRenderer = (state: RunnerState, view: ViewFunction) => {
     state.vnodes = patch(state.vnodes, view({model: state.model, act: actionHandler} as Props));
     state.nextRenderId = null;
   };
+};
+
+/**
+ * Retrieves the value within an object, at given scope.
+ */
+const scopeGet = (scope: Array<string | number>, object: any): any => {
+  return scope.length
+    ? scopeGet(scope.slice(1), object[scope[0]])
+    : object;
+};
+
+/**
+ * Returns a copy of the object with the value assigned to the property at specified scope
+ */
+const scopeSet = (scope: Scope, val: any, object: any): any => {
+  if (scope.length === 0) {
+    return val;
+  }
+  const [first, ...rest] = scope;
+  return Array.isArray(object)
+    ? (() => {
+      const copy = object.concat([]);
+      copy[first as number] = scopeSet(rest, val, copy[first as number]);
+      return copy;
+    })()
+    : {...object, [first]: scopeSet(rest, val, object[first])};
+};
+
+const scopePatch = (scope: Scope, fn: (arg: any) => any, object: any): any =>
+  scopeSet(scope, fn(scopeGet(scope, object)), object);
+
+const createPatcher = <T = any>(
+  state: RunnerState,
+  middleware: PatchMiddleware[],
+  patchCallback: () => void,
+  scope: Scope = [],
+  parentScope: Scope = [],
+  scopeCallback: (model: any) => any = (model) => model,
+): ModelPatcher<T> => {
+  const middlewareStack = middleware.reduce((m1, m2) => {
+    return (fn: PatchFunction) => m1(m2(fn));
+  }, (fn: PatchFunction) => fn);
+  const mutate: PatchMiddleware = (fn: PatchFunction<T>) => (model: any) => {
+    const updated = scope
+      ? scopePatch(scope, fn, model)
+      : fn(model);
+    return scopePatch(parentScope, scopeCallback, updated);
+  };
+  const patcher = (fn: PatchFunction<T>) => {
+    state.model = middlewareStack(mutate(fn))(state.model);
+    patchCallback();
+  };
+  (patcher as any).as = <S = any>(childScope: Scope, parentCallback: (model: any) => any): ModelPatcher<S> => {
+    const patcherScope = scope ? scope.concat(childScope) : childScope;
+    return createPatcher(state, middleware, patchCallback, patcherScope, scope, parentCallback);
+  };
+  return patcher as ModelPatcher<T>;
 };
 
 const actionHandlerFactory = (patcher: ModelPatcher, actions: Actions, prefix: any[] = []): ActionHandler => {
@@ -112,16 +174,9 @@ const createActionHandler = <T = any>(
   state: RunnerState,
   actions: Actions<T>,
   render: RenderFunction,
-  middleware: ActionMiddleware[],
+  middleware: PatchMiddleware[],
 ): ActionHandler => {
-  const middlewareStack = middleware.reduce((m1, m2) => {
-    return (fn: PatchFunction) => m1(m2(fn));
-  }, (fn: PatchFunction) => fn);
-
-  const patcher = (fn: PatchFunction<T>) => {
-    state.model = middlewareStack(fn)(state.model);
-    setNextRender(state, () => render(handler));
-  };
+  const patcher = createPatcher(state, middleware, () => setNextRender(state, () => render(handler)));
   const handler = actionHandlerFactory(patcher, actions);
   return handler;
 };
@@ -157,7 +212,7 @@ const runner = <T = any> (model: T, actions: Actions<T>, view: ViewFunction, opt
     state,
     actions,
     render,
-    opt.middleware as ActionMiddleware[],
+    opt.middleware as PatchMiddleware[],
   );
 
   // Start rendering
@@ -166,10 +221,11 @@ const runner = <T = any> (model: T, actions: Actions<T>, view: ViewFunction, opt
 
 export {
   PatchFunction,
+  Scope,
   ModelPatcher,
-  ActionHandler,
-  ActionMiddleware,
   Actions,
+  ActionHandler,
+  PatchMiddleware,
   Props,
   ViewFunction,
   RunnerState,
