@@ -1,0 +1,183 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`html Should accept hooks 1`] = `
+Object {
+  "children": Array [],
+  "data": Object {
+    "hook": Object {
+      "init": [Function],
+    },
+  },
+  "elm": undefined,
+  "key": undefined,
+  "sel": "div",
+  "text": undefined,
+}
+`;
+
+exports[`html Should accept normal DOM properties 1`] = `
+Object {
+  "children": Array [],
+  "data": Object {
+    "props": Object {
+      "title": "undivided",
+    },
+  },
+  "elm": undefined,
+  "key": undefined,
+  "sel": "div",
+  "text": undefined,
+}
+`;
+
+exports[`html Should also accept shorthands for handlers 1`] = `
+Object {
+  "children": Array [],
+  "data": Object {
+    "on": Object {
+      "click": [Function],
+    },
+  },
+  "elm": undefined,
+  "key": undefined,
+  "sel": "div",
+  "text": undefined,
+}
+`;
+
+exports[`html Should also accept shorthands for hooks 1`] = `
+Object {
+  "children": Array [],
+  "data": Object {
+    "hook": Object {
+      "init": [Function],
+    },
+  },
+  "elm": undefined,
+  "key": undefined,
+  "sel": "div",
+  "text": undefined,
+}
+`;
+
+exports[`html Should be able to render functions 1`] = `
+Object {
+  "children": Array [],
+  "data": Object {},
+  "elm": undefined,
+  "key": undefined,
+  "sel": "div",
+  "text": undefined,
+}
+`;
+
+exports[`html Should not freak out of props is null 1`] = `
+Object {
+  "children": Array [],
+  "data": Object {},
+  "elm": undefined,
+  "key": undefined,
+  "sel": "div",
+  "text": undefined,
+}
+`;
+
+exports[`html Should not freak out of props is null 2`] = `
+Object {
+  "children": Array [],
+  "data": Object {},
+  "elm": undefined,
+  "key": null,
+  "sel": "div",
+  "text": undefined,
+}
+`;
+
+exports[`html Should pass a key to root vnode in a function 1`] = `
+Object {
+  "children": Array [],
+  "data": Object {},
+  "elm": undefined,
+  "key": "don't change",
+  "sel": "div",
+  "text": undefined,
+}
+`;
+
+exports[`html Should pass event handlers 1`] = `
+Object {
+  "children": Array [],
+  "data": Object {
+    "on": Object {
+      "click": [Function],
+    },
+  },
+  "elm": undefined,
+  "key": undefined,
+  "sel": "div",
+  "text": undefined,
+}
+`;
+
+exports[`html Should pass keys 1`] = `
+Object {
+  "children": Array [],
+  "data": Object {
+    "key": "don't change",
+  },
+  "elm": undefined,
+  "key": "don't change",
+  "sel": "div",
+  "text": undefined,
+}
+`;
+
+exports[`html Should pass props to functions 1`] = `
+Object {
+  "children": undefined,
+  "data": Object {},
+  "elm": undefined,
+  "key": undefined,
+  "sel": "div",
+  "text": "bar",
+}
+`;
+
+exports[`html Should render a normal VNODE 1`] = `
+Object {
+  "children": Array [],
+  "data": Object {},
+  "elm": undefined,
+  "key": undefined,
+  "sel": "div",
+  "text": undefined,
+}
+`;
+
+exports[`html Should render children 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": undefined,
+      "data": Object {},
+      "elm": undefined,
+      "key": undefined,
+      "sel": "span",
+      "text": "Hello",
+    },
+    Object {
+      "children": undefined,
+      "data": Object {},
+      "elm": undefined,
+      "key": undefined,
+      "sel": "span",
+      "text": "world",
+    },
+  ],
+  "data": Object {},
+  "elm": undefined,
+  "key": undefined,
+  "sel": "div",
+  "text": undefined,
+}
+`;

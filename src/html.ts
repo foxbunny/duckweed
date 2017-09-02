@@ -9,14 +9,14 @@ import snabClass from "snabbdom/modules/class";
 import snabEvents from "snabbdom/modules/eventlisteners";
 import snabProps from "snabbdom/modules/props";
 import styleModule from "snabbdom/modules/style";
-import {VNode} from "snabbdom/vnode";
+import {VNode, VNodeData} from "snabbdom/vnode";
 
 import documentevents from "./modules/documentevents";
 import keyevents from "./modules/keyevents";
 import routeevents from "./modules/routeevents";
 
 type ChildVNodes = Array<VNode | null | undefined>;
-type ChildVNodesArg = Array<VNode | undefined | null | InlineChild | [VNode]>;
+type ChildVNodesArg = Array<VNode | undefined | null | InlineChild | [VNode] | string>;
 
 interface InlineChild {
   __vnodes: ChildVNodes;
@@ -63,7 +63,7 @@ const prepareClasses = (classes: string | string[] | {[name: string]: any} | nul
   }, {});
 };
 
-const prepareProps = (props: GenericProps | null): GenericProps => {
+const prepareProps = (props: GenericProps | null): VNodeData => {
   if (props == null) {
     return {};
   }
@@ -75,6 +75,10 @@ const prepareProps = (props: GenericProps | null): GenericProps => {
       finalProps[mod][sub] = props[prop];
     } else if (prop === "key") {
       finalProps.key = props[prop];
+    } else if (prop === "on") {
+      finalProps.on = props[prop];
+    } else if (prop === "hook") {
+      finalProps.hook = props[prop];
     } else if (prop === "class") {
       finalProps.class = prepareClasses(props[prop]);
     } else if (prop === "style") {
@@ -89,33 +93,35 @@ const prepareProps = (props: GenericProps | null): GenericProps => {
   return finalProps;
 };
 
-const renderIntrinsic = (elm: string, props: GenericProps, children: ChildVNodesArg): VNode => {
-  children = children.reduce((arr, c) => {
-    if (isInlineChild(c)) {
-      // Case where we have something like `{props.__inner}` somewhere in the
-      // render functions.
-      return arr.concat(c.__vnodes);
-    }
-    if (Array.isArray(c)) {
-      // Case where we have something like `{arr.map(() => ...)}`
-      return arr.concat(c);
-    }
-    return arr.concat([c]);
-  }, [] as ChildVNodes);
-  return snab(elm, prepareProps(props), children as ChildVNodes);
+const renderIntrinsic = (elm: string, props: GenericProps = {}, children: ChildVNodesArg = []): VNode => {
+  const finalChildren: string | ChildVNodes = children.length && typeof children[0] === "string"
+    ? children[0] as string
+    : children.reduce((arr, c) => {
+        if (isInlineChild(c)) {
+          // Case where we have something like `{props.__inner}` somewhere in the
+          // render functions.
+          return arr.concat(c.__vnodes);
+        }
+        if (Array.isArray(c)) {
+          // Case where we have something like `{arr.map(() => ...)}`
+          return arr.concat(c);
+        }
+        return arr.concat([c as VNode]);
+      }, [] as ChildVNodes);
+  return snab(elm, prepareProps(props), finalChildren as any);
 };
 
-const renderFunction = (func: ViewFunction, props: any, children: ChildVNodes): VNode => {
-  const key = props.key;
+const renderFunction = (func: ViewFunction, props: any = {}, children: ChildVNodes = []): VNode => {
+  const key = props && props.key;
   if (key) {
     delete props.key;
   }
-  const vnode = func(props, {__vnodes: children});
+  const vnode = func(props, {__vnodes: children || []});
   vnode.key = vnode.key || key;
   return vnode;
 };
 
-const html = (elm: string | ViewFunction, props: any, ...children: ChildVNodesArg): VNode => {
+const html = (elm: string | ViewFunction, props?: any, ...children: ChildVNodesArg): VNode => {
   if (typeof elm === "string") {
     return renderIntrinsic(elm, props, children);
   } else {
