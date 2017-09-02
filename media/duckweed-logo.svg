@@ -6,54 +6,54 @@
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:xlink="http://www.w3.org/1999/xlink"
-   width="140.34181mm"
-   height="26.906897mm"
-   viewBox="0 0 140.34181 26.906897"
+   id="svg8"
    version="1.1"
-   id="svg8">
+   viewBox="0 0 140.34181 26.906897"
+   height="26.906897mm"
+   width="140.34181mm">
   <defs
      id="defs2">
     <linearGradient
        id="linearGradient4522">
       <stop
-         id="stop4518"
+         style="stop-color:#8cc33a;stop-opacity:1"
          offset="0"
-         style="stop-color:#8cc33a;stop-opacity:1" />
+         id="stop4518" />
       <stop
-         id="stop4520"
+         style="stop-color:#3f7c04;stop-opacity:1"
          offset="1"
-         style="stop-color:#3f7c04;stop-opacity:1" />
+         id="stop4520" />
     </linearGradient>
     <radialGradient
-       xlink:href="#linearGradient4522"
-       id="radialGradient4493"
-       cx="-158.35692"
-       cy="84.840485"
-       fx="-158.35692"
-       fy="84.840485"
-       r="51.167912"
+       gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(0.23522005,0.32129588,-0.43473446,0.31826742,118.68109,70.837787)"
-       gradientUnits="userSpaceOnUse" />
+       r="51.167912"
+       fy="84.840485"
+       fx="-158.35692"
+       cy="84.840485"
+       cx="-158.35692"
+       id="radialGradient4493"
+       xlink:href="#linearGradient4522" />
     <radialGradient
-       xlink:href="#linearGradient4522"
-       id="radialGradient4503"
-       cx="-156.20721"
-       cy="18.985952"
-       fx="-156.20721"
-       fy="18.985952"
-       r="30.546034"
+       gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(0.22266672,0.53780351,-0.43653603,0.18073895,97.539232,115.6459)"
-       gradientUnits="userSpaceOnUse" />
+       r="30.546034"
+       fy="18.985952"
+       fx="-156.20721"
+       cy="18.985952"
+       cx="-156.20721"
+       id="radialGradient4503"
+       xlink:href="#linearGradient4522" />
     <radialGradient
-       xlink:href="#linearGradient4522"
-       id="radialGradient4515"
-       cx="-78.378532"
-       cy="72.782593"
-       fx="-78.378532"
-       fy="72.782593"
-       r="33.710247"
+       gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(0.54669044,0,0,0.45045677,101.57487,11.87515)"
-       gradientUnits="userSpaceOnUse" />
+       r="33.710247"
+       fy="72.782593"
+       fx="-78.378532"
+       cy="72.782593"
+       cx="-78.378532"
+       id="radialGradient4515"
+       xlink:href="#linearGradient4522" />
   </defs>
   <metadata
      id="metadata5">
@@ -68,34 +68,61 @@
     </rdf:RDF>
   </metadata>
   <g
-     transform="translate(-43.725797,-28.400216)"
-     id="layer1">
+     id="layer1"
+     transform="translate(-43.725797,-28.400216)">
     <g
-       id="g4506"
+       style="stroke-width:1.61249018"
        transform="matrix(0.6201588,0,0,0.6201588,30.279333,14.306762)"
-       style="stroke-width:1.61249018">
+       id="g4506">
       <path
-         id="path4485"
+         style="opacity:1;fill:url(#radialGradient4493);fill-opacity:1;stroke:none;stroke-width:0.42663801;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          d="M 24.861578,59.676436 C 31.824198,70.4805 49.189219,66.928593 52.471968,54.634537 56.416757,39.861108 49.535366,37.286564 39.026911,38.548484 30.799428,39.536491 14.89783,44.790833 24.861578,59.676436 Z"
-         style="opacity:1;fill:url(#radialGradient4493);fill-opacity:1;stroke:none;stroke-width:0.42663801;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+         id="path4485" />
       <path
-         id="path4495"
+         style="opacity:1;fill:url(#radialGradient4503);fill-opacity:1;stroke:none;stroke-width:0.42663801;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          d="m 45.647375,25.491738 c -4.361362,7.457766 0.04856,11.682449 3.924826,13.677595 4.322648,2.224904 7.173922,4.948635 10.007671,-1.787695 1.092724,-2.046507 4.377681,-11.419283 -3.196561,-13.66806 -7.574247,-2.24878 -9.235143,-0.227476 -10.735936,1.77816 z"
-         style="opacity:1;fill:url(#radialGradient4503);fill-opacity:1;stroke:none;stroke-width:0.42663801;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+         id="path4495" />
       <path
-         id="path4505"
+         style="opacity:1;fill:url(#radialGradient4515);fill-opacity:1;stroke:none;stroke-width:0.42663801;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          d="m 54.382523,43.232079 c 4.004131,-2.970011 6.023692,-4.329054 11.020222,-3.482429 4.996529,0.846625 12.485876,8.177454 6.169697,13.728351 -6.316179,5.550894 -12.104539,1.471643 -14.194235,-1.728395 -1.855412,-2.841267 -5.090805,-6.22356 -2.995684,-8.517527 z"
-         style="opacity:1;fill:url(#radialGradient4515);fill-opacity:1;stroke:none;stroke-width:0.42663801;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+         id="path4505" />
     </g>
-    <text
-       xml:space="preserve"
+    <g
+       id="text4501"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.44272423px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:end;writing-mode:lr-tb;text-anchor:end;opacity:1;fill:#22241c;fill-opacity:1;stroke:none;stroke-width:0.26458332;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       x="77.391724"
-       y="48.398739"
-       id="text4501"><tspan
-         id="tspan4499"
-         x="77.391724"
-         y="48.398739"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Acherus Grotesque';-inkscape-font-specification:'Acherus Grotesque';text-align:start;text-anchor:start;fill:#22241c;stroke-width:0.26458332">DUCKWEED</tspan></text>
+       aria-label="DUCKWEED">
+      <path
+         id="path5105"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Acherus Grotesque';-inkscape-font-specification:'Acherus Grotesque';text-align:start;text-anchor:start;fill:#22241c;stroke-width:0.26458332"
+         d="m 79.512637,35.488832 c -0.221313,0 -0.295084,0.07377 -0.295084,0.295083 v 12.31974 c 0,0.221313 0.09221,0.295084 0.295084,0.295084 h 4.518467 c 3.633217,0 6.418068,-2.784851 6.418068,-6.454954 0,-3.670102 -2.784851,-6.454953 -6.418068,-6.454953 z m 4.500025,1.254105 c 3.006164,0 4.961092,2.415997 4.961092,5.200848 0,2.766409 -1.954928,5.200849 -4.961092,5.200849 H 80.674529 V 36.742937 Z" />
+      <path
+         id="path5107"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Acherus Grotesque';-inkscape-font-specification:'Acherus Grotesque';text-align:start;text-anchor:start;fill:#22241c;stroke-width:0.26458332"
+         d="m 97.970346,48.638494 c 3.006164,0 5.219294,-1.881158 5.219294,-5.55126 v -7.303319 c 0,-0.221312 -0.0553,-0.295083 -0.27664,-0.295083 h -0.88526 c -0.22131,0 -0.29508,0.07377 -0.29508,0.295083 v 7.211106 c 0,3.061492 -1.54919,4.352483 -3.762314,4.352483 -2.213127,0 -3.762316,-1.290991 -3.762316,-4.352483 v -7.211106 c 0,-0.221312 -0.07377,-0.295083 -0.295084,-0.295083 h -0.866808 c -0.221312,0 -0.295083,0.05533 -0.295083,0.295083 v 7.303319 c 0,3.670102 2.213127,5.55126 5.219291,5.55126 z" />
+      <path
+         id="path5109"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Acherus Grotesque';-inkscape-font-specification:'Acherus Grotesque';text-align:start;text-anchor:start;fill:#22241c;stroke-width:0.26458332"
+         d="m 112.11217,47.347504 c -2.87707,0 -5.12708,-2.618867 -5.12708,-5.403719 0,-2.784851 2.25001,-5.403718 5.12708,-5.403718 1.71517,0 3.04305,0.756152 3.85453,1.62296 0.14754,0.147542 0.27664,0.147542 0.42418,-0.01844 l 0.53484,-0.590167 c 0.14754,-0.165985 0.16598,-0.258198 0.0184,-0.40574 -1.18033,-1.180334 -3.04305,-1.899601 -4.83199,-1.899601 -3.63322,0 -6.6025,3.024607 -6.6025,6.694709 0,3.670103 2.96928,6.694709 6.6025,6.694709 1.78894,0 3.65166,-0.719266 4.83199,-1.8996 0.16599,-0.165985 0.16599,-0.258198 0.0185,-0.442626 l -0.55329,-0.590167 c -0.1291,-0.129099 -0.23975,-0.165984 -0.40574,-0.01844 -0.8668,0.903694 -2.17624,1.659846 -3.89141,1.659846 z" />
+      <path
+         id="path5111"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Acherus Grotesque';-inkscape-font-specification:'Acherus Grotesque';text-align:start;text-anchor:start;fill:#22241c;stroke-width:0.26458332"
+         d="m 122.45393,41.648702 6.49184,-5.864787 c 0.16598,-0.202869 0.0738,-0.295083 -0.11066,-0.295083 h -1.18033 c -0.22132,0 -0.29509,0.07377 -0.5164,0.295083 l -5.92012,5.366833 v -5.366833 c 0,-0.239755 -0.0738,-0.295083 -0.29508,-0.295083 h -0.88525 c -0.22131,0 -0.29508,0.07377 -0.29508,0.295083 v 12.31974 c 0,0.221313 0.0738,0.295084 0.29508,0.295084 h 0.88525 c 0.22131,0 0.29508,-0.05533 0.29508,-0.295084 v -5.901671 l 6.25209,5.901671 c 0.20287,0.221313 0.29508,0.295084 0.47951,0.295084 h 1.2541 c 0.16599,0 0.29509,-0.07377 0.0922,-0.295084 z" />
+      <path
+         id="path5113"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Acherus Grotesque';-inkscape-font-specification:'Acherus Grotesque';text-align:start;text-anchor:start;fill:#22241c;stroke-width:0.26458332"
+         d="m 131.82917,35.783915 c -0.0738,-0.221312 -0.16598,-0.295083 -0.36885,-0.295083 h -1.12501 c -0.18443,0 -0.22131,0.07377 -0.1291,0.295083 l 4.77667,12.670152 c 0.0738,0.184427 0.12909,0.258198 0.20287,0.258198 h 0.12909 c 0.0738,0 0.1291,-0.09221 0.20287,-0.258198 l 3.24592,-10.457025 3.24592,10.457025 c 0.0738,0.165985 0.1291,0.258198 0.20287,0.258198 h 0.1291 c 0.0922,0 0.1291,-0.09221 0.20287,-0.258198 l 4.77667,-12.670152 c 0.0922,-0.221312 0.0553,-0.295083 -0.1291,-0.295083 h -1.12501 c -0.20287,0 -0.29508,0.07377 -0.36885,0.295083 l -3.48568,9.829973 -3.09837,-10.069728 c -0.0738,-0.20287 -0.1291,-0.295084 -0.2582,-0.295084 h -0.18443 c -0.1291,0 -0.18443,0.09221 -0.2582,0.295084 l -3.09838,10.069728 z" />
+      <path
+         id="path5115"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Acherus Grotesque';-inkscape-font-specification:'Acherus Grotesque';text-align:start;text-anchor:start;fill:#22241c;stroke-width:0.26458332"
+         d="m 157.86915,48.398739 c 0.22131,0 0.27664,-0.07377 0.27664,-0.295084 v -0.682381 c 0,-0.221312 -0.0553,-0.295083 -0.27664,-0.295083 h -7.04512 V 42.51551 h 6.71315 c 0.22131,0 0.29508,-0.07377 0.29508,-0.295084 v -0.682381 c 0,-0.221312 -0.0738,-0.295083 -0.29508,-0.295083 h -6.71315 V 36.76138 h 7.04512 c 0.20287,0 0.27664,-0.07377 0.27664,-0.295084 v -0.682381 c 0,-0.221312 -0.0738,-0.295083 -0.27664,-0.295083 h -8.20701 c -0.22132,0 -0.29509,0.07377 -0.29509,0.295083 v 12.31974 c 0,0.221313 0.0738,0.295084 0.29509,0.295084 z" />
+      <path
+         id="path5117"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Acherus Grotesque';-inkscape-font-specification:'Acherus Grotesque';text-align:start;text-anchor:start;fill:#22241c;stroke-width:0.26458332"
+         d="m 169.57595,48.398739 c 0.22131,0 0.27664,-0.07377 0.27664,-0.295084 v -0.682381 c 0,-0.221312 -0.0553,-0.295083 -0.27664,-0.295083 h -7.04512 V 42.51551 h 6.71315 c 0.22131,0 0.29508,-0.07377 0.29508,-0.295084 v -0.682381 c 0,-0.221312 -0.0738,-0.295083 -0.29508,-0.295083 h -6.71315 V 36.76138 h 7.04512 c 0.20287,0 0.27664,-0.07377 0.27664,-0.295084 v -0.682381 c 0,-0.221312 -0.0738,-0.295083 -0.27664,-0.295083 h -8.20701 c -0.22132,0 -0.29509,0.07377 -0.29509,0.295083 v 12.31974 c 0,0.221313 0.0738,0.295084 0.29509,0.295084 z" />
+      <path
+         id="path5119"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Acherus Grotesque';-inkscape-font-specification:'Acherus Grotesque';text-align:start;text-anchor:start;fill:#22241c;stroke-width:0.26458332"
+         d="m 173.13108,35.488832 c -0.22132,0 -0.29509,0.07377 -0.29509,0.295083 v 12.31974 c 0,0.221313 0.0922,0.295084 0.29509,0.295084 h 4.51846 c 3.63322,0 6.41807,-2.784851 6.41807,-6.454954 0,-3.670102 -2.78485,-6.454953 -6.41807,-6.454953 z m 4.50002,1.254105 c 3.00616,0 4.96109,2.415997 4.96109,5.200848 0,2.766409 -1.95493,5.200849 -4.96109,5.200849 h -3.33813 V 36.742937 Z" />
+    </g>
   </g>
 </svg>
