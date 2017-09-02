@@ -42,7 +42,7 @@ describe("documentevents module", () => {
     expect(callback).not.toHaveBeenCalled();
   });
 
-  fit("Can swap handlers on update", async () => {
+  it("Can swap handlers on update", async () => {
     const cb1 = jest.fn();
     const cb2 = jest.fn();
     (cb1 as any).bogus = "cb1";

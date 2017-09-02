@@ -100,7 +100,7 @@ describe("runner", () => {
     // FIXME: how do we test this anyway?
   });
 
-  fit("Should pass an action handler that can generate a subaction", () => {
+  it("Should pass an action handler that can generate a subaction", () => {
     const root = document.createElement("div");
 
     // Sub-submodule
