@@ -19,6 +19,16 @@ Duckweed is written in [TypeScript](https://www.typescriptlang.org), and uses
 Although Duckweed is small (only 7KB min+gz), it includes state managent,
 transitions, routing events, and the full power of Snabbdom.
 
+- [Installation](#installation)
+- [Take it for a spin](#take-it-for-a-spin)
+- [Hello Duckweed!](#hello-duckweed)
+- [A bit more contrived example](#a-bit-more-convoluted-example)
+- [Model-action-view in a nutshell](#model-action-view-in-a-nutshell)
+- [Composition](#composition)
+- [Handling events](#handling-events)
+- [I want class-based components](#i-want-class-based-components)
+- [What's with the name?](#whats-with-the-name)
+
 # Installation
 
 To install Duckweed, use:
