@@ -33,7 +33,7 @@ const modelSnapshotter = (() => {
       return modelSnapshots;
     },
     get current() {
-      return modelSnapshots[modelSnapshots.length][1];
+      return modelSnapshots[modelSnapshots.length - 1][1];
     },
     clear() {
       modelSnapshots = [];
