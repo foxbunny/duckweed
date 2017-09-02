@@ -16,6 +16,16 @@ a simple API, and functions happen to be a good step in that direction.
 Duckweed is written in [TypeScript](https://www.typescriptlang.org), and uses
 [Snabbdom](https://github.com/snabbdom/snabbdom) under the hood.
 
+# Installation
+
+To install Duckweed, use:
+
+```
+npm install duckweed@beta
+```
+
+Currently, only beta releases are available.
+
 # Hello Duckweed!
 
 This is the simplest possible application you can create with Duckweed:
