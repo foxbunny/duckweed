@@ -361,10 +361,13 @@ Here you go:
 class HelloDuckweed {
   constructor(initialState = {}) {
     this.state = initialState;
+    this.updateName = this.updateName.bind(this);
+    this.render = this.render.bind(this);
   }
 
-  updateName(e) {
+  updateName(patch, e) {
     this.state.name = e.target.value;
+    patch(() => {});
   }
 
   render({act}) {
@@ -379,7 +382,7 @@ class HelloDuckweed {
 
 const comp = new HelloDuckweed();
 
-duckweed.runner(undefined, comp, comp.render.bind(comp));
+duckweed.runner(undefined, comp, comp.render);
 ```
 
 No, sorry, it was just a joke. I'm pretty sure it would work, but I don't even
