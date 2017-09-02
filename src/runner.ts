@@ -14,7 +14,7 @@ type Scope = Array<string | number>;
 
 interface ModelPatcher<T = any> {
   (fn: PatchFunction<T>): void;
-  as<S = any>(scope: Scope): ModelPatcher<S>;
+  as<S = any>(scope: Scope, callback?: (model: T) => T): ModelPatcher<S>;
 }
 
 interface Actions<T = any> {
@@ -130,7 +130,7 @@ const createPatcher = <T = any>(
     state.model = middlewareStack(mutate(fn))(state.model);
     patchCallback();
   };
-  (patcher as any).as = <S = any>(childScope: Scope, parentCallback: (model: any) => any): ModelPatcher<S> => {
+  (patcher as any).as = <S = any>(childScope: Scope, parentCallback: (model: T) => T): ModelPatcher<S> => {
     const patcherScope = scope ? scope.concat(childScope) : childScope;
     return createPatcher(state, middleware, patchCallback, patcherScope, scope, parentCallback);
   };
