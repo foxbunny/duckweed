@@ -1776,9 +1776,9 @@ var setNextRender = function (state, render) {
  * The renderer function will keep updating the vnodes stored in the runner
  * state using a specified view function.
  */
-var createRenderer = function (state, view) {
+var createRenderer = function (state, patch, view) {
     return function (actionHandler) {
-        state.vnodes = html_1.patch(state.vnodes, view({ model: state.model, act: actionHandler }));
+        state.vnodes = patch(state.vnodes, view({ model: state.model, act: actionHandler }));
         state.nextRenderId = null;
     };
 };
@@ -1887,6 +1887,8 @@ var createActionHandler = function (state, actions, render, middleware) {
 };
 var DEFAULT_OPTIONS = {
     middleware: [],
+    patch: html_1.patch,
+    plugins: [],
     root: "#app",
 };
 /**
@@ -1905,9 +1907,25 @@ var runner = function (model, actions, view, options) {
         nextRenderId: null,
         vnodes: is.str(opt.root) ? document.querySelector(opt.root) : opt.root,
     };
+    // Collect plugin actions
+    opt.plugins.forEach(function (_a) {
+        var pluginActions = _a.actions;
+        actions = __assign({}, pluginActions, actions);
+    });
     // Prepare the engine
-    var render = createRenderer(state, view);
+    var render = createRenderer(state, opt.patch, view);
     var actionHandler = createActionHandler(state, actions, render, opt.middleware);
+    // Init plugins
+    opt.plugins.forEach(function (_a) {
+        var init = _a.init;
+        init(function () {
+            var args = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                args[_i] = arguments[_i];
+            }
+            return actionHandler.apply(void 0, __spread(args))();
+        });
+    });
     // Start rendering
     render(actionHandler);
 };
