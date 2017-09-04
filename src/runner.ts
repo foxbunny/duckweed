@@ -5,7 +5,7 @@
 
 import {VNode} from "snabbdom/vnode";
 
-import {patch} from "./html";
+import {patch as duckweedPatch} from "./html";
 import * as is from "./is";
 
 type PatchFunction<T = any> = (model: T) => T;
@@ -49,8 +49,11 @@ interface Plugin {
   init(act: (...args: any[]) => void): void;
 }
 
+type VDOMPatchFunction = (oldVnode: Element | VNode, vnode: VNode) => VNode;
+
 interface RunnerOptions {
   root?: string | Element | VNode;
+  patch?: VDOMPatchFunction;
   plugins?: Plugin[];
   middleware?: PatchMiddleware[];
 }
@@ -79,7 +82,7 @@ const setNextRender = (state: RunnerState, render: RenderFunction): void => {
  * The renderer function will keep updating the vnodes stored in the runner
  * state using a specified view function.
  */
-const createRenderer = (state: RunnerState, view: ViewFunction) => {
+const createRenderer = (state: RunnerState, patch: VDOMPatchFunction, view: ViewFunction) => {
   return (actionHandler: ActionHandler) => {
     state.vnodes = patch(state.vnodes, view({model: state.model, act: actionHandler} as Props));
     state.nextRenderId = null;
@@ -189,6 +192,7 @@ const createActionHandler = <T = any>(
 
 const DEFAULT_OPTIONS: RunnerOptions = {
   middleware: [],
+  patch: duckweedPatch,
   plugins: [],
   root: "#app",
 };
@@ -219,7 +223,7 @@ const runner = <T = any> (model: T, actions: Actions<T>, view: ViewFunction, opt
   });
 
   // Prepare the engine
-  const render = createRenderer(state, view);
+  const render = createRenderer(state, opt.patch as VDOMPatchFunction, view);
   const actionHandler = createActionHandler<T>(
     state,
     actions,
@@ -248,6 +252,7 @@ export {
   RunnerState,
   RenderFunction,
   Plugin,
+  VDOMPatchFunction,
   RunnerOptions,
   runner,
 };

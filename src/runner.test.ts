@@ -256,4 +256,12 @@ describe("runner", () => {
     await pause();
     expect(root).toMatchSnapshot();
   });
+
+  it("Should take an alternative patch function", () => {
+    const root = document.createElement("div");
+    const p = jest.fn();
+    const v = () => h("div");
+    runner(undefined, {}, v, {patch: p, root});
+    expect(p).toHaveBeenCalledWith(root, v());
+  });
 });
