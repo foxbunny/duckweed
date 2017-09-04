@@ -44,8 +44,14 @@ interface RunnerState<T = any> {
   nextRenderId: null | number;
 }
 
+interface Plugin {
+  actions: Actions<any>;
+  init(act: (...args: any[]) => void): void;
+}
+
 interface RunnerOptions {
   root?: string | Element | VNode;
+  plugins?: Plugin[];
   middleware?: PatchMiddleware[];
 }
 
@@ -183,6 +189,7 @@ const createActionHandler = <T = any>(
 
 const DEFAULT_OPTIONS: RunnerOptions = {
   middleware: [],
+  plugins: [],
   root: "#app",
 };
 
@@ -206,6 +213,11 @@ const runner = <T = any> (model: T, actions: Actions<T>, view: ViewFunction, opt
     vnodes: is.str(opt.root) ? (document.querySelector(opt.root) as Element) : opt.root as Element | VNode,
   };
 
+  // Collect plugin actions
+  (opt.plugins as Plugin[]).forEach(({actions: pluginActions}) => {
+    actions = {...pluginActions, ...actions};
+  });
+
   // Prepare the engine
   const render = createRenderer(state, view);
   const actionHandler = createActionHandler<T>(
@@ -214,6 +226,11 @@ const runner = <T = any> (model: T, actions: Actions<T>, view: ViewFunction, opt
     render,
     opt.middleware as PatchMiddleware[],
   );
+
+  // Init plugins
+  (opt.plugins as Plugin[]).forEach(({init}) => {
+    init((...args: any[]) => actionHandler(...args)());
+  });
 
   // Start rendering
   render(actionHandler);
@@ -229,6 +246,8 @@ export {
   Props,
   ViewFunction,
   RunnerState,
+  RenderFunction,
+  Plugin,
   RunnerOptions,
   runner,
 };

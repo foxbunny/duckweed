@@ -222,4 +222,38 @@ describe("runner", () => {
     expect(modelSnapshotter.current.list.total).toBe(3);
     expect(modelSnapshotter.snapshots).toMatchSnapshot();
   });
+
+  it("Should accept a plugin function which can control the app from within the runner", async () => {
+    const root = document.createElement("div");
+    const m = {
+      name: "Test",
+    };
+    const v = ({model}) => h("div", model.name);
+    // Fake event system
+    const contraption = {
+      listener: undefined,
+      listen(fn: any) {
+        this.listener = fn;
+      },
+      trigger(data: any) {
+        this.listener(data);
+      },
+    };
+    const plugin = {
+      actions: {
+        pluginAction(patcher: any, data: any) {
+          patcher((model) => ({
+            name: data,
+          }));
+        },
+      },
+      init(act: any) {
+        contraption.listen((data) => act("pluginAction", data));
+      },
+    };
+    runner(m, {}, v, {plugins: [plugin], root});
+    contraption.trigger("Pluginized");
+    await pause();
+    expect(root).toMatchSnapshot();
+  });
 });

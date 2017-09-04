@@ -1,5 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`runner Should accept a plugin function which can control the app from within the runner 1`] = `
+<div>
+  Pluginized
+</div>
+`;
+
 exports[`runner Should pass the model to the view as props 1`] = `
 <div>
   Hello, model
