@@ -201,9 +201,7 @@ const DEFAULT_OPTIONS: RunnerOptions = {
  * Create and start a new application runtime
  *
  * The runner function takes a model, actions mapping, view function, and an
- * optional root element selector (defaults to "#app"). It then kicks off the
- * render process, rendering the initial view onto the root element (root
- * element is replaced in the process).
+ * an object containing runner options, and kickstarts the app.
  */
 const runner = <T = any> (model: T, actions: Actions<T>, view: ViewFunction, options: RunnerOptions = {}) => {
   const opt = {
