@@ -5,6 +5,7 @@
 
 import {VNode} from "snabbdom/vnode";
 
+import * as events from "./events";
 import html, {GenericProps} from "./html";
 import runner, {ViewFunction} from "./runner";
 
@@ -22,4 +23,5 @@ declare global {
 export {
   html,
   runner,
+  events,
 };

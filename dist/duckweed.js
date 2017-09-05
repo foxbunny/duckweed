@@ -70,7 +70,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -80,8 +80,8 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var vnode_1 = __webpack_require__(2);
-var is = __webpack_require__(3);
+var vnode_1 = __webpack_require__(3);
+var is = __webpack_require__(4);
 function addNS(data, children, sel) {
     data.ns = 'http://www.w3.org/2000/svg';
     if (sel !== 'foreignObject' && children !== undefined) {
@@ -148,6 +148,51 @@ exports.default = h;
  * (c) 2017 Hajime Yamasaki Vukelic
  * All rights reserved.
  */
+Object.defineProperty(exports, "__esModule", { value: true });
+var str = function (s) {
+    return typeof s === "string";
+};
+exports.str = str;
+var input = function (target) {
+    return target.tagName === "INPUT";
+};
+exports.input = input;
+var checkbox = function (target) {
+    return target.tagName === "INPUT" && target.type === "checkbox";
+};
+exports.checkbox = checkbox;
+var event = function (ev) {
+    return ev instanceof Event;
+};
+exports.event = event;
+var changeEvent = function (ev) {
+    return event(ev) && ev.type === "change";
+};
+exports.changeEvent = changeEvent;
+var inputEvent = function (ev) {
+    return event(ev) && ev.type === "input";
+};
+exports.inputEvent = inputEvent;
+var vnode = function (vn) {
+    return typeof vn === "object" && "sel" in vnode;
+};
+exports.vnode = vnode;
+var pathData = function (data) {
+    return typeof data === "object" && typeof data.pathname === "string";
+};
+exports.pathData = pathData;
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * (c) 2017 Hajime Yamasaki Vukelic
+ * All rights reserved.
+ */
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
     if (!m) return o;
@@ -165,15 +210,15 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var snabbdom = __webpack_require__(5);
+var snabbdom = __webpack_require__(7);
 var h_1 = __webpack_require__(0);
-var class_1 = __webpack_require__(8);
-var eventlisteners_1 = __webpack_require__(9);
-var props_1 = __webpack_require__(10);
-var style_1 = __webpack_require__(11);
-var documentevents_1 = __webpack_require__(12);
-var keyevents_1 = __webpack_require__(13);
-var routeevents_1 = __webpack_require__(14);
+var class_1 = __webpack_require__(10);
+var eventlisteners_1 = __webpack_require__(11);
+var props_1 = __webpack_require__(12);
+var style_1 = __webpack_require__(13);
+var documentevents_1 = __webpack_require__(14);
+var keyevents_1 = __webpack_require__(15);
+var routeevents_1 = __webpack_require__(16);
 var patch = snabbdom.init([
     class_1.default,
     style_1.default,
@@ -287,7 +332,7 @@ exports.default = html;
 
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -303,7 +348,7 @@ exports.default = vnode;
 //# sourceMappingURL=vnode.js.map
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -317,7 +362,7 @@ exports.primitive = primitive;
 //# sourceMappingURL=is.js.map
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -327,22 +372,109 @@ exports.primitive = primitive;
  * All rights reserved.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-var html_1 = __webpack_require__(1);
+var events = __webpack_require__(6);
+exports.events = events;
+var html_1 = __webpack_require__(2);
 exports.html = html_1.default;
-var runner_1 = __webpack_require__(19);
+var runner_1 = __webpack_require__(21);
 exports.runner = runner_1.default;
 
 
 /***/ }),
-/* 5 */
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * (c) 2017 Hajime Yamasaki Vukelic
+ * All rights reserved.
+ */
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var is = __webpack_require__(1);
+/**
+ * Decorates an event handler with a processor
+ */
+var from = function (processor, handler) { return function () {
+    var eventArgs = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        eventArgs[_i] = arguments[_i];
+    }
+    return handler.apply(void 0, __spread(processor.apply(void 0, __spread(eventArgs))));
+}; };
+exports.from = from;
+/**
+ * Processor that handles input DOM events
+ */
+var inputEvent = function (event) {
+    return [event.target.value];
+};
+exports.inputEvent = inputEvent;
+/**
+ * Processor that handles change DOM events on checkboxes
+ */
+var checkboxEvent = function (event) {
+    return [event.target.checked, event.target.value];
+};
+exports.checkboxEvent = checkboxEvent;
+/**
+ * Automatic processor that handles various events and hooks
+ */
+var auto = function () {
+    var eventCallbackArgs = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        eventCallbackArgs[_i] = arguments[_i];
+    }
+    var first = eventCallbackArgs[0];
+    if (is.vnode(first)) {
+        // This is mostly for hooks. We add the vnode objects to args.
+        return eventCallbackArgs;
+    }
+    else if (is.changeEvent(first) && is.checkbox(first.target)) {
+        return checkboxEvent(first);
+    }
+    else if (is.inputEvent(first) && is.input(first.target)) {
+        first.preventDefault();
+        return inputEvent(first);
+    }
+    else if (is.pathData(first)) {
+        return [first];
+    }
+    return [];
+};
+exports.auto = auto;
+
+
+/***/ }),
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var vnode_1 = __webpack_require__(2);
-var is = __webpack_require__(3);
-var htmldomapi_1 = __webpack_require__(6);
+var vnode_1 = __webpack_require__(3);
+var is = __webpack_require__(4);
+var htmldomapi_1 = __webpack_require__(8);
 function isUndef(s) { return s === undefined; }
 function isDef(s) { return s !== undefined; }
 var emptyNode = vnode_1.default('', {}, [], undefined, undefined);
@@ -367,7 +499,7 @@ function createKeyToOldIdx(children, beginIdx, endIdx) {
 var hooks = ['create', 'update', 'remove', 'destroy', 'pre', 'post'];
 var h_1 = __webpack_require__(0);
 exports.h = h_1.h;
-var thunk_1 = __webpack_require__(7);
+var thunk_1 = __webpack_require__(9);
 exports.thunk = thunk_1.thunk;
 function init(modules, domApi) {
     var i, j, cbs = {};
@@ -647,7 +779,7 @@ exports.init = init;
 //# sourceMappingURL=snabbdom.js.map
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -719,7 +851,7 @@ exports.default = exports.htmlDomApi;
 //# sourceMappingURL=htmldomapi.js.map
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -772,7 +904,7 @@ exports.default = exports.thunk;
 //# sourceMappingURL=thunk.js.map
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -803,7 +935,7 @@ exports.default = exports.classModule;
 //# sourceMappingURL=class.js.map
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -904,7 +1036,7 @@ exports.default = exports.eventListenersModule;
 //# sourceMappingURL=eventlisteners.js.map
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -936,7 +1068,7 @@ exports.default = exports.propsModule;
 //# sourceMappingURL=props.js.map
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1028,7 +1160,7 @@ exports.default = exports.styleModule;
 //# sourceMappingURL=style.js.map
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1127,7 +1259,7 @@ exports.default = module;
 
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1232,7 +1364,7 @@ exports.default = module;
 
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1242,7 +1374,7 @@ exports.default = module;
  * All rights reserved.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-var qs = __webpack_require__(15);
+var qs = __webpack_require__(17);
 var handleEvent = function (data, vnode) {
     var route = vnode.data.route;
     if (typeof route === "function") {
@@ -1290,14 +1422,14 @@ exports.default = module;
 
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var strictUriEncode = __webpack_require__(16);
-var objectAssign = __webpack_require__(17);
-var decodeComponent = __webpack_require__(18);
+var strictUriEncode = __webpack_require__(18);
+var objectAssign = __webpack_require__(19);
+var decodeComponent = __webpack_require__(20);
 
 function encoderForArrayFormat(opts) {
 	switch (opts.arrayFormat) {
@@ -1503,7 +1635,7 @@ exports.stringify = function (obj, opts) {
 
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1516,7 +1648,7 @@ module.exports = function (str) {
 
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1613,7 +1745,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1714,7 +1846,7 @@ module.exports = function (encodedURI) {
 
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1752,8 +1884,8 @@ var __spread = (this && this.__spread) || function () {
     return ar;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var html_1 = __webpack_require__(1);
-var is = __webpack_require__(20);
+var html_1 = __webpack_require__(2);
+var is = __webpack_require__(1);
 /**
  * Clears the timer if one was set by the patch function.
  */
@@ -1895,9 +2027,7 @@ var DEFAULT_OPTIONS = {
  * Create and start a new application runtime
  *
  * The runner function takes a model, actions mapping, view function, and an
- * optional root element selector (defaults to "#app"). It then kicks off the
- * render process, rendering the initial view onto the root element (root
- * element is replaced in the process).
+ * an object containing runner options, and kickstarts the app.
  */
 var runner = function (model, actions, view, options) {
     if (options === void 0) { options = {}; }
@@ -1931,51 +2061,6 @@ var runner = function (model, actions, view, options) {
 };
 exports.runner = runner;
 exports.default = runner;
-
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-/**
- * (c) 2017 Hajime Yamasaki Vukelic
- * All rights reserved.
- */
-Object.defineProperty(exports, "__esModule", { value: true });
-var str = function (s) {
-    return typeof s === "string";
-};
-exports.str = str;
-var input = function (target) {
-    return target.tagName === "INPUT";
-};
-exports.input = input;
-var checkbox = function (target) {
-    return target.tagName === "INPUT" && target.type === "checkbox";
-};
-exports.checkbox = checkbox;
-var event = function (ev) {
-    return ev instanceof Event;
-};
-exports.event = event;
-var changeEvent = function (ev) {
-    return event(ev) && ev.type === "change";
-};
-exports.changeEvent = changeEvent;
-var inputEvent = function (ev) {
-    return event(ev) && ev.type === "input";
-};
-exports.inputEvent = inputEvent;
-var vnode = function (vn) {
-    return typeof vn === "object" && "sel" in vnode;
-};
-exports.vnode = vnode;
-var pathData = function (data) {
-    return typeof data === "object" && typeof data.pathname === "string";
-};
-exports.pathData = pathData;
 
 
 /***/ })
