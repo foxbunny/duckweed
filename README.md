@@ -143,14 +143,14 @@ Once the state is modified, the cycle repeats.
 # Composition
 
 For our discussion of this topic, we'll call the model-actions-views triplet a
-'model'. Although the usual pattern is to have models that are saved in a
-physical JavaScript model, they don't need to be colocated in a single file. The
-'model' we talk about is simply a concept of having related models, actions, and
-views.
+*module*. Although the usual pattern is to have modules that are saved in a
+physical JavaScript module, they don't need to be colocated in a single file.
+The module we talk about is simply a concept of having related models, actions,
+and views.
 
 In Duckweed applications, models, actions, and views, are composed separately.
 We group related models, actions, and views in modules, and we treat modules as
-a unit of reusable code.
+a unit of reusable interface--like components in component-based architectures.
 
 A common theme in the composition pattern discussed here is that children
 generally don't know anything about the parent. All modules should be designed
