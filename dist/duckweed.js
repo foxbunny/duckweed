@@ -1946,9 +1946,6 @@ var createPatcher = function (state, middleware, patchCallback, scope, parentSco
     if (scope === void 0) { scope = []; }
     if (parentScope === void 0) { parentScope = []; }
     if (scopeCallback === void 0) { scopeCallback = function (model) { return model; }; }
-    var middlewareStack = middleware.reduce(function (m1, m2) {
-        return function (fn) { return m1(m2(fn)); };
-    }, function (fn) { return fn; });
     var mutate = function (fn) { return function (model) {
         var updated = scope
             ? scopePatch(scope, fn, model)
@@ -1956,7 +1953,7 @@ var createPatcher = function (state, middleware, patchCallback, scope, parentSco
         return scopePatch(parentScope, scopeCallback, updated);
     }; };
     var patcher = function (fn) {
-        state.model = middlewareStack(mutate(fn))(state.model);
+        state.model = middleware(mutate(fn))(state.model);
         patchCallback();
     };
     patcher.as = function (childScope, parentCallback) {
@@ -2043,8 +2040,11 @@ var runner = function (model, actions, view, options) {
         actions = __assign({}, pluginActions, actions);
     });
     // Prepare the engine
+    var middlewareStack = opt.middleware.reduce(function (m1, m2) {
+        return function (fn) { return m1(m2(fn)); };
+    }, function (fn) { return fn; });
     var render = createRenderer(state, opt.patch, view);
-    var actionHandler = createActionHandler(state, actions, render, opt.middleware);
+    var actionHandler = createActionHandler(state, actions, render, middlewareStack);
     // Init plugins
     opt.plugins.forEach(function (_a) {
         var init = _a.init;

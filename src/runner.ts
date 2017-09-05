@@ -120,15 +120,12 @@ const scopePatch = (scope: Scope, fn: (arg: any) => any, object: any): any =>
 
 const createPatcher = <T = any>(
   state: RunnerState,
-  middleware: PatchMiddleware[],
+  middleware: PatchMiddleware,
   patchCallback: () => void,
   scope: Scope = [],
   parentScope: Scope = [],
   scopeCallback: (model: any) => any = (model) => model,
 ): ModelPatcher<T> => {
-  const middlewareStack = middleware.reduce((m1, m2) => {
-    return (fn: PatchFunction) => m1(m2(fn));
-  }, (fn: PatchFunction) => fn);
   const mutate: PatchMiddleware = (fn: PatchFunction<T>) => (model: any) => {
     const updated = scope
       ? scopePatch(scope, fn, model)
@@ -136,7 +133,7 @@ const createPatcher = <T = any>(
     return scopePatch(parentScope, scopeCallback, updated);
   };
   const patcher = (fn: PatchFunction<T>) => {
-    state.model = middlewareStack(mutate(fn))(state.model);
+    state.model = middleware(mutate(fn))(state.model);
     patchCallback();
   };
   (patcher as any).as = <S = any>(childScope: Scope, parentCallback: (model: T) => T): ModelPatcher<S> => {
@@ -183,7 +180,7 @@ const createActionHandler = <T = any>(
   state: RunnerState,
   actions: Actions<T>,
   render: RenderFunction,
-  middleware: PatchMiddleware[],
+  middleware: PatchMiddleware,
 ): ActionHandler => {
   const patcher = createPatcher(state, middleware, () => setNextRender(state, () => render(handler)));
   const handler = actionHandlerFactory(patcher, actions);
@@ -221,12 +218,15 @@ const runner = <T = any> (model: T, actions: Actions<T>, view: ViewFunction, opt
   });
 
   // Prepare the engine
+  const middlewareStack = (opt.middleware as PatchMiddleware[]).reduce((m1, m2) => {
+    return (fn: PatchFunction) => m1(m2(fn));
+  }, (fn: PatchFunction) => fn);
   const render = createRenderer(state, opt.patch as VDOMPatchFunction, view);
   const actionHandler = createActionHandler<T>(
     state,
     actions,
     render,
-    opt.middleware as PatchMiddleware[],
+    middlewareStack,
   );
 
   // Init plugins
