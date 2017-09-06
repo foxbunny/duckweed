@@ -14,11 +14,11 @@ may no longer work. You should use Snabbdom's `h()` instead in such cases.
 
 The `html()` function accepts the following parameters.
 
----
-| element | string or function | Either a HTML element name or a view function|
-| props | object or null | The element attributes, event handler bindings, or view props|
-| children | array of vnodes or a string | The nested elements, text nodes, and/or views|
----
+param     | type                | description
+----------|---------------------|----------------------------------------------------------------
+element   | string or function  | Either a HTML element name or a view function
+props     | object or null      | The element attributes, event handler bindings, or view props
+children  | array or string     | The nested elements, text nodes, and/or views
 
 ## Element
 

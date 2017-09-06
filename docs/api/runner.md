@@ -7,12 +7,12 @@
 The runner function kick-starts a Duckweed application. It takes the following
 arguments.
 
-| param       | type            | description                           |
-|-------------|-----------------|---------------------------------------|
-| model       | any type        | The initial application state         |
-| actions     | object          | Mapping from key to message handler   |
-| view        | function        | View function                         |
-| options     | object          | Runner options                        |
+ param       | type            | description
+-------------|-----------------|---------------------------------------
+ model       | any type        | The initial application state
+ actions     | object          | Mapping from key to message handler
+ view        | function        | View function
+ options     | object          | Runner options
 
 ## Model
 
