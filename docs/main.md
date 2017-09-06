@@ -31,4 +31,5 @@ the Duckweed internals will find useful comments in the source code.
   - [`duckweed.events`](./api/events.md)
   - [`act()`](./api/act.md)
   - [`patch()`](./api/patch.md)
+  - [`duckweed/test-helpers`](./api/test-helpers.md)
 

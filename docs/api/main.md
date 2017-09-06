@@ -11,3 +11,5 @@ coverage, look at the [Developers guide](../guide/main.md) section.
   - [`patch`](./patch.md)
 - Views
   - [`act`](./act.md)
+- Utilities
+  - [`test-helpers`](./test-helpers.md)
