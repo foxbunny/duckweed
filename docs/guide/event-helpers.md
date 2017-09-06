@@ -11,7 +11,8 @@ Let's go back to our second example and use the helpers:
 /** @jsx duckweed.html */
 
 const duckweed = require("duckweed");
-const E = require("duckweed/events");
+
+const E = duckweed.events;
 
 // ...
 
