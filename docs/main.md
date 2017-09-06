@@ -25,6 +25,7 @@ the Duckweed internals will find useful comments in the source code.
   - [Non-standard events](./guide/non-standard-events.md)
   - [Writing middleware functions](./guide/middleware.md)
   - [Writing plugins](./guide/plugins.md)
+  - [Testing Duckweed applications](./guide/testing.md)
 - [API Reference](./api/main.md)
   - [`duckweed.runner()`](./api/runner.md)
   - [`duckweed.html()`](./api/html.md)

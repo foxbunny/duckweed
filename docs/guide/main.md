@@ -14,5 +14,6 @@ The following topics are covered:
 - [Non-standard events](./non-standard-events.md)
 - [Writing middleware functions](./middleware.md)
 - [Writing plugins](./plugins.md)
+- [Testing Duckweed applications](./testing.md)
 
 [Documentation index](../main.md)

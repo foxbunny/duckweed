@@ -34,4 +34,4 @@ const notificationPlugin = {
 }
 ```
 
-[Documentation index](../main.md)
+[Documentation index](../main.md) | [Next topic](./testing.md)
