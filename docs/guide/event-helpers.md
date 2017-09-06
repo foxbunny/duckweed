@@ -5,7 +5,8 @@ generally not a very good idea. It makes the code harder to test because we
 would need to create or mock event objects. Duckweed comes with helper functions
 that can make things a bit easier.
 
-Let's go back to our second example and use the helpers:
+Let's go back to the code from our [second example](./mav-intro.md) and use the
+helpers:
 
 ```jsx
 /** @jsx duckweed.html */
