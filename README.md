@@ -24,7 +24,7 @@ transitions, routing events, and the full power of Snabbdom.
 To install Duckweed, use:
 
 ```
-npm install duckweed@beta
+npm install duckweed
 ```
 
 Currently, only beta releases are available.
