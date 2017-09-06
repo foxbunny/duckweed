@@ -160,3 +160,5 @@ the first middleware.
 See [Writing middlware](../guide/middlware.md) guide for more information.
 
 **default:** `[]`
+
+[Documentation index](../main.md) | [API reference index](./main.md)
