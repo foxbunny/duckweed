@@ -46,7 +46,7 @@ interface RunnerState<T = any> {
 
 interface Plugin {
   actions: Actions<any>;
-  init(act: (...args: any[]) => void): void;
+  init(act: (...args: any[]) => void, state: RunnerState): void;
 }
 
 type VDOMPatchFunction = (oldVnode: Element | VNode, vnode: VNode) => VNode;
@@ -229,9 +229,11 @@ const runner = <T = any> (model: T, actions: Actions<T>, view: ViewFunction, opt
     middlewareStack,
   );
 
+  const pluginActionHandler = (...args: any[]) => actionHandler(...args)();
+
   // Init plugins
   (opt.plugins as Plugin[]).forEach(({init}) => {
-    init((...args: any[]) => actionHandler(...args)());
+    init(pluginActionHandler, state);
   });
 
   // Start rendering

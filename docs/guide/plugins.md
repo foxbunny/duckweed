@@ -10,7 +10,12 @@ application action.
 
 The `init()` function is called before the application is rendered for the first
 time, and is given a modified action handler that immediately transmits
-messages.
+messages, and a runner state object. The runner state object has `model`,
+`vnodes`, and `nextRenderId` properties, which represent the application model,
+currently rendered vnodes (which is usually the root DOM node initially), and
+the `setTimeout()` timer ID of the next scheduled render. Plugin therefore gains
+access to the key data in the runner and is free to do whatever it wants with
+it.
 
 Here's an example of a supposed plugin that receives notifications from an
 external source, and updates the model.
@@ -26,7 +31,7 @@ const notificationPlugin = {
       }));
     },
   },
-  init(act) {
+  init(act, state) {
     pushNotifier.addListener((message) => {
       act("receiveNotification", message);
     });

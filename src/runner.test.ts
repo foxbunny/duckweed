@@ -247,8 +247,10 @@ describe("runner", () => {
           }));
         },
       },
-      init(act: any) {
+      init(act: any, state: any) {
         contraption.listen((data) => act("pluginAction", data));
+        expect(state.model).toBe(m);
+        expect(state.vnodes).toBe(root);
       },
     };
     runner(m, {}, v, {plugins: [plugin], root});

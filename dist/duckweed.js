@@ -2045,16 +2045,17 @@ var runner = function (model, actions, view, options) {
     }, function (fn) { return fn; });
     var render = createRenderer(state, opt.patch, view);
     var actionHandler = createActionHandler(state, actions, render, middlewareStack);
+    var pluginActionHandler = function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        return actionHandler.apply(void 0, __spread(args))();
+    };
     // Init plugins
     opt.plugins.forEach(function (_a) {
         var init = _a.init;
-        init(function () {
-            var args = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                args[_i] = arguments[_i];
-            }
-            return actionHandler.apply(void 0, __spread(args))();
-        });
+        init(pluginActionHandler, state);
     });
     // Start rendering
     render(actionHandler);
