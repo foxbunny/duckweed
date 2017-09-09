@@ -112,7 +112,7 @@ Snabbdom and Duckweed modules:
 - snabbdom/modules/eventlisteners
 - snabbdom/modules/props
 - snabbdom/modules/style
-- duckweed/modules/documentevents
+- duckweed/modules/offevents
 - duckweed/modules/keyevents
 - duckweed/modules/routeevents
 

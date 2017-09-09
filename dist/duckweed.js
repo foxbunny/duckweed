@@ -216,15 +216,15 @@ var class_1 = __webpack_require__(10);
 var eventlisteners_1 = __webpack_require__(11);
 var props_1 = __webpack_require__(12);
 var style_1 = __webpack_require__(13);
-var documentevents_1 = __webpack_require__(14);
-var keyevents_1 = __webpack_require__(15);
+var keyevents_1 = __webpack_require__(14);
+var offevents_1 = __webpack_require__(15);
 var routeevents_1 = __webpack_require__(16);
 var patch = snabbdom.init([
     class_1.default,
     style_1.default,
     eventlisteners_1.default,
     props_1.default,
-    documentevents_1.default,
+    offevents_1.default,
     keyevents_1.default,
     routeevents_1.default,
 ]);
@@ -1193,105 +1193,6 @@ var __spread = (this && this.__spread) || function () {
     return ar;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var invokeHandler = function (handler, vnode, event) {
-    if (typeof handler === "function") {
-        handler.call(vnode, event, vnode);
-    }
-    else {
-        var _a = __read(handler), func = _a[0], args = _a.slice(1);
-        func.call.apply(func, __spread([vnode], args, [event, vnode]));
-    }
-};
-var handleEvent = function (event, vnode) {
-    var name = event.type;
-    var off = vnode.data.off;
-    if (off && off[name]) {
-        invokeHandler(off[name], vnode, event);
-    }
-};
-var createListener = function (container) {
-    var handler = function (event) {
-        if (container.contains(event.target)) {
-            // Event target it inside the container so we're not interested.
-            return;
-        }
-        // We will only handle events that are triggered outside the container.
-        handleEvent(event, handler.vnode);
-    };
-    return handler;
-};
-var updateListeners = function (oldVNode, vnode) {
-    var oldOff = oldVNode.data.off;
-    var off = vnode && vnode.data.off;
-    // Optimization for reused immutable handlers
-    if (oldOff === off) {
-        return;
-    }
-    var oldListener = oldVNode.offListener;
-    // Remove existing listeners
-    if (oldOff && oldListener) {
-        Object.keys(oldOff)
-            .filter(function (name) { return !off || !(name in off); })
-            .forEach(function (name) {
-            document.removeEventListener(name, oldListener, false);
-        });
-    }
-    var elm = (vnode && vnode.elm);
-    // Add new listeners if necessary
-    if (off) {
-        var listener_1 = vnode.offListener || oldVNode.offListener || createListener(elm);
-        listener_1.vnode = vnode;
-        vnode.offListener = listener_1;
-        Object.keys(off)
-            .filter(function (name) { return !oldOff || !(name in oldOff); })
-            .forEach(function (name) {
-            document.addEventListener(name, listener_1, false);
-        });
-    }
-};
-var module = {
-    create: updateListeners,
-    destroy: updateListeners,
-    update: updateListeners,
-};
-exports.module = module;
-exports.default = module;
-
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-/**
- * (c) 2017 Hajime Yamasaki Vukelic
- * All rights reserved.
- *
- * Loosely based on snabbdom/src/modules/eventlisteners.ts
- *
- */
-var __read = (this && this.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var __spread = (this && this.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
 var keyCodeMap = {
     8: "backspace",
     9: "tab",
@@ -1352,6 +1253,105 @@ var updateListeners = function (oldVNode, vnode) {
         listener.vnode = vnode;
         vnode.keysListener = listener;
         elm.addEventListener("keyup", listener, false);
+    }
+};
+var module = {
+    create: updateListeners,
+    destroy: updateListeners,
+    update: updateListeners,
+};
+exports.module = module;
+exports.default = module;
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * (c) 2017 Hajime Yamasaki Vukelic
+ * All rights reserved.
+ *
+ * Loosely based on snabbdom/src/modules/eventlisteners.ts
+ *
+ */
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var invokeHandler = function (handler, vnode, event) {
+    if (typeof handler === "function") {
+        handler.call(vnode, event, vnode);
+    }
+    else {
+        var _a = __read(handler), func = _a[0], args = _a.slice(1);
+        func.call.apply(func, __spread([vnode], args, [event, vnode]));
+    }
+};
+var handleEvent = function (event, vnode) {
+    var name = event.type;
+    var off = vnode.data.off;
+    if (off && off[name]) {
+        invokeHandler(off[name], vnode, event);
+    }
+};
+var createListener = function (container) {
+    var handler = function (event) {
+        if (container.contains(event.target)) {
+            // Event target it inside the container so we're not interested.
+            return;
+        }
+        // We will only handle events that are triggered outside the container.
+        handleEvent(event, handler.vnode);
+    };
+    return handler;
+};
+var updateListeners = function (oldVNode, vnode) {
+    var oldOff = oldVNode.data.off;
+    var off = vnode && vnode.data.off;
+    // Optimization for reused immutable handlers
+    if (oldOff === off) {
+        return;
+    }
+    var oldListener = oldVNode.offListener;
+    // Remove existing listeners
+    if (oldOff && oldListener) {
+        Object.keys(oldOff)
+            .filter(function (name) { return !off || !(name in off); })
+            .forEach(function (name) {
+            document.removeEventListener(name, oldListener, false);
+        });
+    }
+    var elm = (vnode && vnode.elm);
+    // Add new listeners if necessary
+    if (off) {
+        var listener_1 = vnode.offListener || oldVNode.offListener || createListener(elm);
+        listener_1.vnode = vnode;
+        vnode.offListener = listener_1;
+        Object.keys(off)
+            .filter(function (name) { return !oldOff || !(name in oldOff); })
+            .forEach(function (name) {
+            document.addEventListener(name, listener_1, false);
+        });
     }
 };
 var module = {

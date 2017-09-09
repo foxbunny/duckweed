@@ -11,8 +11,8 @@ import snabProps from "snabbdom/modules/props";
 import styleModule from "snabbdom/modules/style";
 import {VNode, VNodeData} from "snabbdom/vnode";
 
-import documentevents from "./modules/documentevents";
 import keyevents from "./modules/keyevents";
+import offevents from "./modules/offevents";
 import routeevents from "./modules/routeevents";
 
 type ChildVNodes = Array<VNode | null | undefined>;
@@ -38,7 +38,7 @@ const patch = snabbdom.init([
   styleModule,
   snabEvents,
   snabProps,
-  documentevents,
+  offevents,
   keyevents,
   routeevents,
 ]);

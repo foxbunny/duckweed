@@ -3,16 +3,16 @@
  * All rights reserved.
  */
 
-import docevents from "./documentevents";
+import offevents from "./offevents";
 
 import * as snabbdom from "snabbdom";
 import h from "snabbdom/h";
 
 import {pause} from "../test-helpers";
 
-const patch = snabbdom.init([docevents]);
+const patch = snabbdom.init([offevents]);
 
-describe("documentevents module", () => {
+describe("offevents module", () => {
   beforeEach(() => {
     document.body.innerHTML = "";
   });
