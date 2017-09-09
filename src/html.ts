@@ -11,6 +11,7 @@ import snabProps from "snabbdom/modules/props";
 import styleModule from "snabbdom/modules/style";
 import {VNode, VNodeData} from "snabbdom/vnode";
 
+import docevents from "./modules/docevents";
 import keyevents from "./modules/keyevents";
 import offevents from "./modules/offevents";
 import routeevents from "./modules/routeevents";
@@ -38,6 +39,7 @@ const patch = snabbdom.init([
   styleModule,
   snabEvents,
   snabProps,
+  docevents,
   offevents,
   keyevents,
   routeevents,

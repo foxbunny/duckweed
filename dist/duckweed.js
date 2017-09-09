@@ -216,14 +216,16 @@ var class_1 = __webpack_require__(10);
 var eventlisteners_1 = __webpack_require__(11);
 var props_1 = __webpack_require__(12);
 var style_1 = __webpack_require__(13);
-var keyevents_1 = __webpack_require__(14);
-var offevents_1 = __webpack_require__(15);
-var routeevents_1 = __webpack_require__(16);
+var docevents_1 = __webpack_require__(14);
+var keyevents_1 = __webpack_require__(15);
+var offevents_1 = __webpack_require__(16);
+var routeevents_1 = __webpack_require__(17);
 var patch = snabbdom.init([
     class_1.default,
     style_1.default,
     eventlisteners_1.default,
     props_1.default,
+    docevents_1.default,
     offevents_1.default,
     keyevents_1.default,
     routeevents_1.default,
@@ -376,7 +378,7 @@ var events = __webpack_require__(6);
 exports.events = events;
 var html_1 = __webpack_require__(2);
 exports.html = html_1.default;
-var runner_1 = __webpack_require__(21);
+var runner_1 = __webpack_require__(22);
 exports.runner = runner_1.default;
 
 
@@ -1168,6 +1170,97 @@ exports.default = exports.styleModule;
 /**
  * (c) 2017 Hajime Yamasaki Vukelic
  * All rights reserved.
+ */
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
+var __spread = (this && this.__spread) || function () {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var invokeHandler = function (handler, vnode, event) {
+    if (typeof handler === "function") {
+        handler.call(vnode, event, vnode);
+    }
+    else {
+        var _a = __read(handler), func = _a[0], args = _a.slice(1);
+        func.call.apply(func, __spread([vnode], args, [event, vnode]));
+    }
+};
+var handleEvent = function (event, vnode) {
+    var name = event.type;
+    var doc = vnode.data.doc;
+    if (doc && doc[name]) {
+        invokeHandler(doc[name], vnode, event);
+    }
+};
+var createListener = function (container) {
+    var handler = function (event) {
+        handleEvent(event, handler.vnode);
+    };
+    return handler;
+};
+var updateListeners = function (oldVNode, vnode) {
+    var oldDoc = oldVNode.data.doc;
+    var doc = vnode && vnode.data.doc;
+    // Optimization for reused immutable handlers
+    if (oldDoc === doc) {
+        return;
+    }
+    var oldListener = oldVNode.docListener;
+    // Remove existing listeners
+    if (oldDoc && oldListener) {
+        Object.keys(oldDoc)
+            .filter(function (name) { return !doc || !(name in doc); })
+            .forEach(function (name) {
+            document.removeEventListener(name, oldListener, false);
+        });
+    }
+    var elm = (vnode && vnode.elm);
+    // Add new listeners if necessary
+    if (doc) {
+        var listener_1 = vnode.docListener || oldVNode.docListener || createListener(elm);
+        listener_1.vnode = vnode;
+        vnode.docListener = listener_1;
+        Object.keys(doc)
+            .filter(function (name) { return !oldDoc || !(name in oldDoc); })
+            .forEach(function (name) {
+            document.addEventListener(name, listener_1, false);
+        });
+    }
+};
+var module = {
+    create: updateListeners,
+    destroy: updateListeners,
+    update: updateListeners,
+};
+exports.module = module;
+exports.default = module;
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * (c) 2017 Hajime Yamasaki Vukelic
+ * All rights reserved.
  *
  * Loosely based on snabbdom/src/modules/eventlisteners.ts
  *
@@ -1265,7 +1358,7 @@ exports.default = module;
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1364,7 +1457,7 @@ exports.default = module;
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1374,7 +1467,7 @@ exports.default = module;
  * All rights reserved.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-var qs = __webpack_require__(17);
+var qs = __webpack_require__(18);
 var handleEvent = function (data, vnode) {
     var route = vnode.data.route;
     if (typeof route === "function") {
@@ -1422,14 +1515,14 @@ exports.default = module;
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var strictUriEncode = __webpack_require__(18);
-var objectAssign = __webpack_require__(19);
-var decodeComponent = __webpack_require__(20);
+var strictUriEncode = __webpack_require__(19);
+var objectAssign = __webpack_require__(20);
+var decodeComponent = __webpack_require__(21);
 
 function encoderForArrayFormat(opts) {
 	switch (opts.arrayFormat) {
@@ -1635,7 +1728,7 @@ exports.stringify = function (obj, opts) {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1648,7 +1741,7 @@ module.exports = function (str) {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1745,7 +1838,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1846,7 +1939,7 @@ module.exports = function (encodedURI) {
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

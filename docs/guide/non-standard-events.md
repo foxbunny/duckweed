@@ -3,6 +3,34 @@
 When using `duckweed.html()` to generate the VDOM, we can take advantage of a
 few special and non-standard bindings.
 
+## DOM events that are triggered on or bubble up to the `document`
+
+In some cases you may want to capture events globally. The `doc` events can be
+used for that purpose. The `doc` event callbacks will be triggered on specific
+events that bubble up to the `document` object regardless of what element they
+are defined on.
+
+Here's an example:
+
+```jsx
+cosnt view = ({model, act}) => (
+  <div class="popup" doc-click={act("close")}>
+    You have been logged in!
+  </div>
+);
+```
+
+The `doc-click` prop is used to pass an event handler. Wherever the user clicks,
+the `close` message will be transmitted. The action handling the event will
+receive the event object as its last argument.
+
+There are a few caveats, though. If an element that's outside the targeted
+element prevents the event propagation, this mechanism will fail, so be mindful
+of that.
+
+When not using `duckweed.html()` factory, these props are specified as `{doc:
+{eventName: ...}}`.
+
 ## DOM events triggered outside an element
 
 It's a common pattern to want to handle events that happen outside an element.
