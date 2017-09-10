@@ -2046,7 +2046,13 @@ var createPatcher = function (state, middleware, patchCallback, scope, parentSco
         return scopePatch(parentScope, scopeCallback, updated);
     }; };
     var patcher = function (fn) {
-        state.model = middleware(mutate(fn))(state.model);
+        var updatedModel = middleware(mutate(fn))(state.model);
+        if (updatedModel === state.model) {
+            // When these are identical, the application state hasn't changed at all,
+            // so we won't do anything else.
+            return;
+        }
+        state.model = updatedModel;
         patchCallback();
     };
     patcher.as = function (childScope, parentCallback) {
@@ -2095,9 +2101,9 @@ var actionHandlerFactory = function (patcher, actions, prefix) {
  * specify messages which will then be tied to action handlers when the events
  * trigger.
  *
- * A message constists of an action identifier, and zero or more arbitrary
+ * A message consists of an action identifier, and zero or more arbitrary
  * user-specified arguments. The message is specified in the prop, and it is
- * passsed to the action handler, which returns an event handler that is used by
+ * passed to the action handler, which returns an event handler that is used by
  * Snabbdom to handle the events. When an event is triggered, the control is
  * returned to the action handler which uses the original message to determine
  * which action handler will be invoked.
@@ -2117,7 +2123,7 @@ var DEFAULT_OPTIONS = {
  * Create and start a new application runtime
  *
  * The runner function takes a model, actions mapping, view function, and an
- * an object containing runner options, and kickstarts the app.
+ * an object containing runner options, and kick starts the app.
  */
 var runner = function (model, actions, view, options) {
     if (options === void 0) { options = {}; }
