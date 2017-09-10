@@ -266,4 +266,18 @@ describe("runner", () => {
     runner(undefined, {}, v, {patch: p, root});
     expect(p).toHaveBeenCalledWith(root, v());
   });
+
+  it("Should not call the render function if patch returns model as is", async () => {
+    const root = document.createElement("div");
+    const p = jest.fn(patch);
+    const m = {foo: "bar"};
+    const a = {foo: (patcher) => patcher((model) => model)};
+    const v = ({act}) => h("div", {on: {click: act("foo")}});
+    runner(m, a, v, {patch: p, root});
+    // First clear the mocks because it's guaranteed to be called once
+    p.mockReset();
+    root.dispatchEvent(new Event("click"));
+    await pause();
+    expect(p).not.toHaveBeenCalled();
+  });
 });

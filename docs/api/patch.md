@@ -37,6 +37,41 @@ The above implementation does not return the model after it's been modified.
 This effectively replaces the model with `undefined` and breaks the app in all
 kinds of horrible ways.
 
+## Suppressing the rendering
+
+The model patcher will normally re-render the view when the patch function
+returns the patched model. This behavior can be suppressed by returning the
+model as is (no copying) from the patch function.
+
+```javascript
+const actions = {
+  save: (patch) => {
+    patch((model) => {
+      storage.save(model.data);
+      return model;
+    });
+  },
+};
+```
+
+The above action will save the model data into the storage, but would not cause
+the re-render to occur afterwards. If for some weird reason you still want to
+re-render in the above example, you could make that happen like so:
+
+```javascript
+const actions = {
+  save: (patch) => {
+    patch((model) => {
+      storage.save(model.data);
+      return {...model};
+    });
+  },
+};
+```
+
+Simply by copying the model, we will cause the re-render to happen. Of course,
+the utility of re-rendering without modifying the model is very questionable.
+
 ## Scoped module patcher
 
 Just like the [`act()`](./act.md) function, patch can be scoped using the `as()`
