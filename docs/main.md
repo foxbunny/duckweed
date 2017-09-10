@@ -23,6 +23,7 @@ the Duckweed internals will find useful comments in the source code.
   - [Composing modules](./guide/composition.md)
   - [Event helpers](./guide/event-helpers.md)
   - [Non-standard events](./guide/non-standard-events.md)
+  - [About (not) using external state](./guide/external-state.md)
   - [Writing middleware functions](./guide/middleware.md)
   - [Writing plugins](./guide/plugins.md)
   - [Testing Duckweed applications](./guide/testing.md)

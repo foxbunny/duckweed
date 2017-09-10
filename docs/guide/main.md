@@ -12,6 +12,7 @@ The following topics are covered:
 - [Composing modules](./composition.md)
 - [Event helpers](./event-helpers.md)
 - [Non-standard events](./non-standard-events.md)
+- [About (not) using external state](./external-state.md)
 - [Writing middleware functions](./middleware.md)
 - [Writing plugins](./plugins.md)
 - [Testing Duckweed applications](./testing.md)

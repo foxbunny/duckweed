@@ -131,5 +131,5 @@ The path data object has the following structure:
 }
 ```
 
-[Documentation index](../main.md) | [Next topic](./middleware.md)
+[Documentation index](../main.md) | [Next topic](./external-state.md)
 
