@@ -6,35 +6,39 @@
  *
  */
 
-import {Module} from "snabbdom/modules/module";
-import {VNode, VNodeData} from "snabbdom/vnode";
+import {Module} from 'snabbdom/modules/module';
+import {VNode, VNodeData} from 'snabbdom/vnode';
 
-interface Keys {
-  [key: string]: EventListener;
-}
 
-const keyCodeMap: {[code: number]: string} = {
-  8: "backspace",
-  9: "tab",
-  13: "enter",
-  27: "escape",
-  33: "pageup",
-  34: "pagedown",
-  37: "left",
-  38: "up",
-  39: "right",
-  40: "down",
-  46: "delete",
+type Keys = {
+  [key: string]: EventListener,
 };
 
+
+const keyCodeMap: {[code: number]: string} = {
+  8: 'backspace',
+  9: 'tab',
+  13: 'enter',
+  27: 'escape',
+  33: 'pageup',
+  34: 'pagedown',
+  37: 'left',
+  38: 'up',
+  39: 'right',
+  40: 'down',
+  46: 'delete',
+};
+
+
 const invokeHandler = (handler: any, vnode?: VNode, event?: Event): any => {
-  if (typeof handler === "function") {
+  if (typeof handler === 'function') {
     handler.call(vnode, event, vnode);
   } else {
     const [func, ...args] = handler;
     func.call(vnode, ...args, event, vnode);
   }
 };
+
 
 const handleEvent = (event: KeyboardEvent, vnode: VNode) => {
   const name = keyCodeMap[event.keyCode];
@@ -47,12 +51,14 @@ const handleEvent = (event: KeyboardEvent, vnode: VNode) => {
   }
 };
 
+
 const createListener = (container: Element) => {
   const handler = (event: KeyboardEvent) => {
     handleEvent(event, (handler as any).vnode);
   };
   return handler;
 };
+
 
 const updateListeners = (oldVNode: VNode, vnode: VNode): void => {
   const oldKeys = (oldVNode.data as VNodeData).keys;
@@ -69,9 +75,9 @@ const updateListeners = (oldVNode: VNode, vnode: VNode): void => {
 
   // Remove existing listeners
   if (oldKeys && oldListener) {
-    const remainingKeys = Object.keys(oldKeys).filter((key) => !keys || !(key in keys));
+    const remainingKeys = Object.keys(oldKeys).filter(key => !keys || !(key in keys));
     if (!remainingKeys.length) {
-      elm.removeEventListener("keyup", oldListener, false);
+      elm.removeEventListener('keyup', oldListener, false);
     }
   }
 
@@ -80,9 +86,10 @@ const updateListeners = (oldVNode: VNode, vnode: VNode): void => {
     const listener = (vnode as any).keysListener || (oldVNode as any).keysListener || createListener(elm);
     listener.vnode = vnode;
     (vnode as any).keysListener = listener;
-    elm.addEventListener("keyup", listener, false);
+    elm.addEventListener('keyup', listener, false);
   }
 };
+
 
 const module = {
   create: updateListeners,
@@ -90,8 +97,10 @@ const module = {
   update: updateListeners,
 } as Module;
 
+
 export {
   Keys,
   module,
 };
+
 export default module;

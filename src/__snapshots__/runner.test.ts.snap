@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`runner Should accept a plugin function which can control the app from within the runner 1`] = `
+exports[`runner Should accept a plugin which can control the app from within the runner 1`] = `
 <div>
   Pluginized
 </div>
@@ -140,5 +140,27 @@ Array [
 exports[`runner Should render the initial view 1`] = `
 <div>
   Hello, root
+</div>
+`;
+
+exports[`runner Should rerender after action patches the model 1`] = `
+<div>
+  <span>
+    0
+  </span>
+  <a
+    href="/foo"
+  />
+</div>
+`;
+
+exports[`runner Should rerender after action patches the model 2`] = `
+<div>
+  <span>
+    2
+  </span>
+  <a
+    href="/foo"
+  />
 </div>
 `;

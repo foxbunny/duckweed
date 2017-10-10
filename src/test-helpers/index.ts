@@ -3,16 +3,15 @@
  * All rights reserved.
  */
 
-import {PatchFunction} from "../runner";
+import {PatchFunction} from '../runner';
+
 
 /**
  * The Promise version of setTimeout, for use in `async` functions
  */
-const pause = (delay: number = 0): Promise<void> => {
-  return new Promise((res) => {
-    setTimeout(res, delay);
-  });
-};
+const pause = (delay = 0): Promise<void> =>
+  new Promise(res => setTimeout(res, delay));
+
 
 /**
  * The middleware that captures model states before and after an update
@@ -26,9 +25,8 @@ const pause = (delay: number = 0): Promise<void> => {
  *
  * The snapshotter history can be cleared by calling the `clear()` method.
  */
-const modelSnapshotter = (() => {
-  let modelSnapshots: Array<[any, any]> = [];
-  return {
+const modelSnapshotter = (modelSnapshots =>
+  ({
     get snapshots() {
       return modelSnapshots;
     },
@@ -46,8 +44,9 @@ const modelSnapshotter = (() => {
         return after;
       };
     },
-  };
-})();
+  })
+)([]);
+
 
 export {
   pause,

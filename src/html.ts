@@ -3,36 +3,36 @@
  * All rights reserved.
  */
 
-import * as snabbdom from "snabbdom";
-import snab from "snabbdom/h";
-import snabClass from "snabbdom/modules/class";
-import snabEvents from "snabbdom/modules/eventlisteners";
-import snabProps from "snabbdom/modules/props";
-import styleModule from "snabbdom/modules/style";
-import {VNode, VNodeData} from "snabbdom/vnode";
+import * as snabbdom from 'snabbdom';
+import snab from 'snabbdom/h';
+import snabClass from 'snabbdom/modules/class';
+import snabEvents from 'snabbdom/modules/eventlisteners';
+import snabProps from 'snabbdom/modules/props';
+import styleModule from 'snabbdom/modules/style';
+import {VNode} from 'snabbdom/vnode';
 
-import docevents from "./modules/docevents";
-import keyevents from "./modules/keyevents";
-import offevents from "./modules/offevents";
-import routeevents from "./modules/routeevents";
+import docevents from './modules/docevents';
+import keyevents from './modules/keyevents';
+import offevents from './modules/offevents';
+import routeevents from './modules/routeevents';
+
 
 type ChildVNodes = Array<VNode | null | undefined>;
 type ChildVNodesArg = Array<VNode | undefined | null | InlineChild | [VNode] | string>;
-
-interface InlineChild {
+type InlineChild = {
   __vnodes: ChildVNodes;
-}
-
-interface GenericProps {
+};
+type GenericProps = {
   [prop: string]: any;
-}
-
-interface PropsBase {
+};
+type PropsBase = {
   key?: string;
   prefix?: any[];
-}
-
+};
 type ViewFunction<T = any> = (props?: T, children?: InlineChild) => VNode;
+type ClassMap = {[className: string]: any};
+type ClassNames = string | string[] | ClassMap;
+
 
 const patch = snabbdom.init([
   snabClass,
@@ -45,55 +45,57 @@ const patch = snabbdom.init([
   routeevents,
 ]);
 
-const isInlineChild = (obj: any): obj is InlineChild => {
-  return typeof obj === "object" && obj !== null && typeof obj.vnodes !== "undefined";
-};
 
-const prepareClasses = (classes: string | string[] | {[name: string]: any} | null | undefined) => {
+const isInlineChild = (obj): obj is InlineChild =>
+  typeof obj === 'object' && obj !== null && typeof obj.vnodes !== 'undefined';
+
+
+const prepareClasses = (classes: ClassNames | null | undefined) => {
   if (classes == null) {
     return {};
   }
-  if (typeof classes === "object" && !Array.isArray(classes)) {
+  if (typeof classes === 'object' && !Array.isArray(classes)) {
     return classes;
   }
-  if (typeof classes === "string") {
+  if (typeof classes === 'string') {
     return {[classes]: true};
   }
-  return classes.reduce((o: {[name: string]: any}, c: string) => {
+  return classes.reduce((o: ClassMap, c: string) => {
     o[c] = true;
     return o;
   }, {});
 };
 
-const prepareProps = (props: GenericProps | null): VNodeData => {
-  if (props == null) {
-    return {};
-  }
-  const finalProps: GenericProps = {};
-  Object.keys(props).forEach((prop) => {
-    const [mod, sub] = prop.split("-");
-    if (sub) {
-      finalProps[mod] = finalProps[mod] || {};
-      finalProps[mod][sub] = props[prop];
-    } else if (prop === "key") {
-      finalProps.key = props[prop];
-    } else if (prop === "on") {
-      finalProps.on = props[prop];
-    } else if (prop === "hook") {
-      finalProps.hook = props[prop];
-    } else if (prop === "class") {
-      finalProps.class = prepareClasses(props[prop]);
-    } else if (prop === "style") {
-      finalProps.style = props[prop];
-    } else if (prop === "route") {
-      finalProps.route = props[prop];
-    } else {
-      finalProps.props = finalProps.props || {};
-      finalProps.props[prop] = props[prop];
-    }
-  });
-  return finalProps;
-};
+
+const prepareProps = (props: GenericProps | null): GenericProps =>
+  props == null
+    ? {}
+    : Object.keys(props)
+        .reduce(
+          (ps: GenericProps, prop: string) => {
+            const [mod, sub] = prop.split('-');
+            if (sub) {
+              ps[mod] = ps[mod] || {};
+              ps[mod][sub] = props[prop];
+            } else if (prop === 'key') {
+              ps.key = props[prop];
+            } else if (prop === 'on') {
+              ps.on = props[prop];
+            } else if (prop === 'hook') {
+              ps.hook = props[prop];
+            } else if (prop === 'class') {
+              ps.class = prepareClasses(props[prop]);
+            } else if (prop === 'style') {
+              ps.style = props[prop];
+            } else if (prop === 'route') {
+              ps.route = props[prop];
+            } else {
+              ps.props = ps.props || {};
+              ps.props[prop] = props[prop];
+            }
+            return ps;
+          }, {});
+
 
 const renderIntrinsic = (elm: string, props: GenericProps = {}, children: ChildVNodesArg = []): VNode => {
   // FIXME: We're messing with any a lot here
@@ -114,23 +116,28 @@ const renderIntrinsic = (elm: string, props: GenericProps = {}, children: ChildV
   return snab(elm, prepareProps(props), children as any);
 };
 
-const renderFunction = (func: ViewFunction, props: any = {}, children: ChildVNodes = []): VNode => {
-  const key = props && props.key;
-  if (key) {
-    delete props.key;
-  }
-  const vnode = func(props, {__vnodes: children || []});
-  vnode.key = vnode.key || key;
-  return vnode;
-};
+const dissoc = (prop: string, props?: GenericProps): GenericProps =>
+  props == null
+    ? null
+    : Object.keys(props)
+      .filter(x => prop !== x)
+      .reduce((o, k) => ({...o, [k]: props[k]}), {});
 
-const html = (elm: string | ViewFunction, props?: any, ...children: ChildVNodesArg): VNode => {
-  if (typeof elm === "string") {
+
+const renderFunction = (func: ViewFunction, props: GenericProps = {}, children: ChildVNodes = []): VNode =>
+  (vnode =>
+    ({...vnode, key: vnode.key || (props && props.key)})
+  )(func(dissoc('key', props), {__vnodes: children || []}));
+
+
+const html = (elm: string | ViewFunction, props?, ...children: ChildVNodesArg): VNode => {
+  if (typeof elm === 'string') {
     return renderIntrinsic(elm, props, children);
   } else {
     return renderFunction(elm, props, children as ChildVNodes);
   }
 };
+
 
 export {
   VNode,
@@ -142,4 +149,5 @@ export {
   patch,
   html,
 };
+
 export default html;

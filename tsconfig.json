@@ -10,13 +10,13 @@
     "jsxFactory": "html",
     "removeComments": false,
     "outDir": "./",
-
-    // Make iterators compatible
-    "downlevelIteration": true,
-
-    /* Strict Type-Checking Options */
-    "strict": true,
     "alwaysStrict": true,
+
+    /* Be a little bit lax about any */
+    "noImplicitAny": false,
+
+    /* Strict type checking */
+    "strict": false,
 
     /* Additional Checks */
     "noUnusedLocals": true,

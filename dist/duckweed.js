@@ -150,15 +150,15 @@ exports.default = h;
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 var str = function (s) {
-    return typeof s === "string";
+    return typeof s === 'string';
 };
 exports.str = str;
 var input = function (target) {
-    return target.tagName === "INPUT";
+    return target.tagName === 'INPUT';
 };
 exports.input = input;
 var checkbox = function (target) {
-    return target.tagName === "INPUT" && target.type === "checkbox";
+    return target.tagName === 'INPUT' && target.type === 'checkbox';
 };
 exports.checkbox = checkbox;
 var event = function (ev) {
@@ -166,19 +166,19 @@ var event = function (ev) {
 };
 exports.event = event;
 var changeEvent = function (ev) {
-    return event(ev) && ev.type === "change";
+    return event(ev) && ev.type === 'change';
 };
 exports.changeEvent = changeEvent;
 var inputEvent = function (ev) {
-    return event(ev) && ev.type === "input";
+    return event(ev) && ev.type === 'input';
 };
 exports.inputEvent = inputEvent;
 var vnode = function (vn) {
-    return typeof vn === "object" && "sel" in vnode;
+    return typeof vn === 'object' && 'sel' in vnode;
 };
 exports.vnode = vnode;
 var pathData = function (data) {
-    return typeof data === "object" && typeof data.pathname === "string";
+    return typeof data === 'object' && typeof data.pathname === 'string';
 };
 exports.pathData = pathData;
 
@@ -193,21 +193,13 @@ exports.pathData = pathData;
  * (c) 2017 Hajime Yamasaki Vukelic
  * All rights reserved.
  */
-var __read = (this && this.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
     }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
+    return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var snabbdom = __webpack_require__(7);
@@ -232,16 +224,16 @@ var patch = snabbdom.init([
 ]);
 exports.patch = patch;
 var isInlineChild = function (obj) {
-    return typeof obj === "object" && obj !== null && typeof obj.vnodes !== "undefined";
+    return typeof obj === 'object' && obj !== null && typeof obj.vnodes !== 'undefined';
 };
 var prepareClasses = function (classes) {
     if (classes == null) {
         return {};
     }
-    if (typeof classes === "object" && !Array.isArray(classes)) {
+    if (typeof classes === 'object' && !Array.isArray(classes)) {
         return classes;
     }
-    if (typeof classes === "string") {
+    if (typeof classes === 'string') {
         return _a = {}, _a[classes] = true, _a;
     }
     return classes.reduce(function (o, c) {
@@ -251,40 +243,39 @@ var prepareClasses = function (classes) {
     var _a;
 };
 var prepareProps = function (props) {
-    if (props == null) {
-        return {};
-    }
-    var finalProps = {};
-    Object.keys(props).forEach(function (prop) {
-        var _a = __read(prop.split("-"), 2), mod = _a[0], sub = _a[1];
-        if (sub) {
-            finalProps[mod] = finalProps[mod] || {};
-            finalProps[mod][sub] = props[prop];
-        }
-        else if (prop === "key") {
-            finalProps.key = props[prop];
-        }
-        else if (prop === "on") {
-            finalProps.on = props[prop];
-        }
-        else if (prop === "hook") {
-            finalProps.hook = props[prop];
-        }
-        else if (prop === "class") {
-            finalProps.class = prepareClasses(props[prop]);
-        }
-        else if (prop === "style") {
-            finalProps.style = props[prop];
-        }
-        else if (prop === "route") {
-            finalProps.route = props[prop];
-        }
-        else {
-            finalProps.props = finalProps.props || {};
-            finalProps.props[prop] = props[prop];
-        }
-    });
-    return finalProps;
+    return props == null
+        ? {}
+        : Object.keys(props)
+            .reduce(function (ps, prop) {
+            var _a = prop.split('-'), mod = _a[0], sub = _a[1];
+            if (sub) {
+                ps[mod] = ps[mod] || {};
+                ps[mod][sub] = props[prop];
+            }
+            else if (prop === 'key') {
+                ps.key = props[prop];
+            }
+            else if (prop === 'on') {
+                ps.on = props[prop];
+            }
+            else if (prop === 'hook') {
+                ps.hook = props[prop];
+            }
+            else if (prop === 'class') {
+                ps.class = prepareClasses(props[prop]);
+            }
+            else if (prop === 'style') {
+                ps.style = props[prop];
+            }
+            else if (prop === 'route') {
+                ps.route = props[prop];
+            }
+            else {
+                ps.props = ps.props || {};
+                ps.props[prop] = props[prop];
+            }
+            return ps;
+        }, {});
 };
 var renderIntrinsic = function (elm, props, children) {
     if (props === void 0) { props = {}; }
@@ -306,23 +297,29 @@ var renderIntrinsic = function (elm, props, children) {
         }, []));
     return h_1.default(elm, prepareProps(props), children);
 };
+var dissoc = function (prop, props) {
+    return props == null
+        ? null
+        : Object.keys(props)
+            .filter(function (x) { return prop !== x; })
+            .reduce(function (o, k) {
+            return (__assign({}, o, (_a = {}, _a[k] = props[k], _a)));
+            var _a;
+        }, {});
+};
 var renderFunction = function (func, props, children) {
     if (props === void 0) { props = {}; }
     if (children === void 0) { children = []; }
-    var key = props && props.key;
-    if (key) {
-        delete props.key;
-    }
-    var vnode = func(props, { __vnodes: children || [] });
-    vnode.key = vnode.key || key;
-    return vnode;
+    return (function (vnode) {
+        return (__assign({}, vnode, { key: vnode.key || (props && props.key) }));
+    })(func(dissoc('key', props), { __vnodes: children || [] }));
 };
 var html = function (elm, props) {
     var children = [];
     for (var _i = 2; _i < arguments.length; _i++) {
         children[_i - 2] = arguments[_i];
     }
-    if (typeof elm === "string") {
+    if (typeof elm === 'string') {
         return renderIntrinsic(elm, props, children);
     }
     else {
@@ -392,26 +389,6 @@ exports.runner = runner_1.default;
  * (c) 2017 Hajime Yamasaki Vukelic
  * All rights reserved.
  */
-var __read = (this && this.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var __spread = (this && this.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var is = __webpack_require__(1);
 /**
@@ -422,7 +399,7 @@ var from = function (processor, handler) { return function () {
     for (var _i = 0; _i < arguments.length; _i++) {
         eventArgs[_i] = arguments[_i];
     }
-    return handler.apply(void 0, __spread(processor.apply(void 0, __spread(eventArgs))));
+    return handler.apply(void 0, processor.apply(void 0, eventArgs));
 }; };
 exports.from = from;
 /**
@@ -1171,34 +1148,14 @@ exports.default = exports.styleModule;
  * (c) 2017 Hajime Yamasaki Vukelic
  * All rights reserved.
  */
-var __read = (this && this.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var __spread = (this && this.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var invokeHandler = function (handler, vnode, event) {
-    if (typeof handler === "function") {
+    if (typeof handler === 'function') {
         handler.call(vnode, event, vnode);
     }
     else {
-        var _a = __read(handler), func = _a[0], args = _a.slice(1);
-        func.call.apply(func, __spread([vnode], args, [event, vnode]));
+        var func = handler[0], args = handler.slice(1);
+        func.call.apply(func, [vnode].concat(args, [event, vnode]));
     }
 };
 var handleEvent = function (event, vnode) {
@@ -1265,47 +1222,27 @@ exports.default = module;
  * Loosely based on snabbdom/src/modules/eventlisteners.ts
  *
  */
-var __read = (this && this.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var __spread = (this && this.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var keyCodeMap = {
-    8: "backspace",
-    9: "tab",
-    13: "enter",
-    27: "escape",
-    33: "pageup",
-    34: "pagedown",
-    37: "left",
-    38: "up",
-    39: "right",
-    40: "down",
-    46: "delete",
+    8: 'backspace',
+    9: 'tab',
+    13: 'enter',
+    27: 'escape',
+    33: 'pageup',
+    34: 'pagedown',
+    37: 'left',
+    38: 'up',
+    39: 'right',
+    40: 'down',
+    46: 'delete',
 };
 var invokeHandler = function (handler, vnode, event) {
-    if (typeof handler === "function") {
+    if (typeof handler === 'function') {
         handler.call(vnode, event, vnode);
     }
     else {
-        var _a = __read(handler), func = _a[0], args = _a.slice(1);
-        func.call.apply(func, __spread([vnode], args, [event, vnode]));
+        var func = handler[0], args = handler.slice(1);
+        func.call.apply(func, [vnode].concat(args, [event, vnode]));
     }
 };
 var handleEvent = function (event, vnode) {
@@ -1337,7 +1274,7 @@ var updateListeners = function (oldVNode, vnode) {
     if (oldKeys && oldListener) {
         var remainingKeys = Object.keys(oldKeys).filter(function (key) { return !keys || !(key in keys); });
         if (!remainingKeys.length) {
-            elm.removeEventListener("keyup", oldListener, false);
+            elm.removeEventListener('keyup', oldListener, false);
         }
     }
     // Add new listeners if necessary
@@ -1345,7 +1282,7 @@ var updateListeners = function (oldVNode, vnode) {
         var listener = vnode.keysListener || oldVNode.keysListener || createListener(elm);
         listener.vnode = vnode;
         vnode.keysListener = listener;
-        elm.addEventListener("keyup", listener, false);
+        elm.addEventListener('keyup', listener, false);
     }
 };
 var module = {
@@ -1370,34 +1307,14 @@ exports.default = module;
  * Loosely based on snabbdom/src/modules/eventlisteners.ts
  *
  */
-var __read = (this && this.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var __spread = (this && this.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var invokeHandler = function (handler, vnode, event) {
-    if (typeof handler === "function") {
+    if (typeof handler === 'function') {
         handler.call(vnode, event, vnode);
     }
     else {
-        var _a = __read(handler), func = _a[0], args = _a.slice(1);
-        func.call.apply(func, __spread([vnode], args, [event, vnode]));
+        var func = handler[0], args = handler.slice(1);
+        func.call.apply(func, [vnode].concat(args, [event, vnode]));
     }
 };
 var handleEvent = function (event, vnode) {
@@ -1469,10 +1386,9 @@ exports.default = module;
 Object.defineProperty(exports, "__esModule", { value: true });
 var qs = __webpack_require__(18);
 var handleEvent = function (data, vnode) {
-    var route = vnode.data.route;
-    if (typeof route === "function") {
-        route(data);
-    }
+    return (function (route) {
+        return typeof route === 'function' && route(data);
+    })(vnode.data.route);
 };
 var createListener = function () {
     var handler = function (event) {
@@ -1481,7 +1397,7 @@ var createListener = function () {
             params: qs.parse(location.search),
             pathname: location.pathname,
             query: location.search,
-            type: "popstate",
+            type: 'popstate',
         };
         handleEvent(pathData, handler.vnode);
     };
@@ -1496,13 +1412,13 @@ var updateListener = function (oldVNode, vnode) {
     var oldListener = oldVNode.routeListener;
     // Remove existing listener
     if (oldRoute && oldListener) {
-        window.removeEventListener("popstate", oldListener, false);
+        window.removeEventListener('popstate', oldListener, false);
     }
     if (route) {
         var listener = createListener();
         listener.vnode = vnode;
         vnode.routeListener = listener;
-        window.addEventListener("popstate", listener, false);
+        window.addEventListener('popstate', listener, false);
     }
 };
 var module = {
@@ -1956,29 +1872,10 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     }
     return t;
 };
-var __read = (this && this.__read) || function (o, n) {
-    var m = typeof Symbol === "function" && o[Symbol.iterator];
-    if (!m) return o;
-    var i = m.call(o), r, ar = [], e;
-    try {
-        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
-    }
-    catch (error) { e = { error: error }; }
-    finally {
-        try {
-            if (r && !r.done && (m = i["return"])) m.call(i);
-        }
-        finally { if (e) throw e.error; }
-    }
-    return ar;
-};
-var __spread = (this && this.__spread) || function () {
-    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
-    return ar;
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var html_1 = __webpack_require__(2);
 var is = __webpack_require__(1);
+var identity = function (x) { return x; };
 /**
  * Clears the timer if one was set by the patch function.
  */
@@ -2019,18 +1916,19 @@ var scopeGet = function (scope, object) {
  * Returns a copy of the object with the value assigned to the property at specified scope
  */
 var scopeSet = function (scope, val, object) {
-    if (scope.length === 0) {
-        return val;
-    }
-    var _a = __read(scope), first = _a[0], rest = _a.slice(1);
-    return Array.isArray(object)
-        ? (function () {
-            var copy = object.concat([]);
-            copy[first] = scopeSet(rest, val, copy[first]);
-            return copy;
-        })()
-        : __assign({}, object, (_b = {}, _b[first] = scopeSet(rest, val, object[first]), _b));
-    var _b;
+    return scope.length
+        ? (function (_a) {
+            var first = _a[0], rest = _a.slice(1);
+            return Array.isArray(object)
+                ? (function () {
+                    var copy = object.concat([]);
+                    copy[first] = scopeSet(rest, val, copy[first]);
+                    return copy;
+                })()
+                : __assign({}, object, (_b = {}, _b[first] = scopeSet(rest, val, object[first]), _b));
+            var _b;
+        })(scope)
+        : val;
 };
 var scopePatch = function (scope, fn, object) {
     return scopeSet(scope, fn(scopeGet(scope, object)), object);
@@ -2038,12 +1936,9 @@ var scopePatch = function (scope, fn, object) {
 var createPatcher = function (state, middleware, patchCallback, scope, parentScope, scopeCallback) {
     if (scope === void 0) { scope = []; }
     if (parentScope === void 0) { parentScope = []; }
-    if (scopeCallback === void 0) { scopeCallback = function (model) { return model; }; }
+    if (scopeCallback === void 0) { scopeCallback = identity; }
     var mutate = function (fn) { return function (model) {
-        var updated = scope
-            ? scopePatch(scope, fn, model)
-            : fn(model);
-        return scopePatch(parentScope, scopeCallback, updated);
+        return (function (updated) { return scopePatch(parentScope, scopeCallback, updated); })(scope ? scopePatch(scope, fn, model) : fn(model));
     }; };
     var patcher = function (fn) {
         var updatedModel = middleware(mutate(fn))(state.model);
@@ -2056,8 +1951,7 @@ var createPatcher = function (state, middleware, patchCallback, scope, parentSco
         patchCallback();
     };
     patcher.as = function (childScope, parentCallback) {
-        var patcherScope = scope ? scope.concat(childScope) : childScope;
-        return createPatcher(state, middleware, patchCallback, patcherScope, scope, parentCallback);
+        return (function (patcherScope) { return createPatcher(state, middleware, patchCallback, patcherScope, scope, parentCallback); })(scope ? scope.concat(childScope) : childScope);
     };
     return patcher;
 };
@@ -2073,15 +1967,15 @@ var actionHandlerFactory = function (patcher, actions, prefix) {
             for (var _i = 0; _i < arguments.length; _i++) {
                 eventArgs[_i] = arguments[_i];
             }
-            var _a = __read(prefix.concat(args, eventArgs)), action = _a[0], actionArgs = _a.slice(1);
+            var _a = prefix.concat(args, eventArgs), action = _a[0], actionArgs = _a.slice(1);
             if (action == null) {
                 return;
             }
             var actionFn = actions[action];
             if (!actionFn) {
-                throw Error("No action found for message [" + action + ", " + actionArgs.join(", ") + "]");
+                throw Error("No action found for message [" + action + ", " + actionArgs.join(', ') + "]");
             }
-            actionFn.apply(void 0, __spread([patcher], actionArgs));
+            actionFn.apply(void 0, [patcher].concat(actionArgs));
         };
     };
     handler.as = function () {
@@ -2117,7 +2011,7 @@ var DEFAULT_OPTIONS = {
     middleware: [],
     patch: html_1.patch,
     plugins: [],
-    root: "#app",
+    root: '#app',
 };
 /**
  * Create and start a new application runtime
@@ -2134,22 +2028,18 @@ var runner = function (model, actions, view, options) {
         vnodes: is.str(opt.root) ? document.querySelector(opt.root) : opt.root,
     };
     // Collect plugin actions
-    opt.plugins.forEach(function (_a) {
-        var pluginActions = _a.actions;
-        actions = __assign({}, pluginActions, actions);
-    });
+    var pluginActions = opt.plugins.reduce(function (ps, p) { return (__assign({}, ps, p.actions)); }, {});
     // Prepare the engine
-    var middlewareStack = opt.middleware.reduce(function (m1, m2) {
-        return function (fn) { return m1(m2(fn)); };
-    }, function (fn) { return fn; });
+    var middlewareStack = opt.middleware
+        .reduce(function (m1, m2) { return function (fn) { return m1(m2(fn)); }; }, identity);
     var render = createRenderer(state, opt.patch, view);
-    var actionHandler = createActionHandler(state, actions, render, middlewareStack);
+    var actionHandler = createActionHandler(state, __assign({}, pluginActions, actions), render, middlewareStack);
     var pluginActionHandler = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             args[_i] = arguments[_i];
         }
-        return actionHandler.apply(void 0, __spread(args))();
+        return actionHandler.apply(void 0, args)();
     };
     // Init plugins
     opt.plugins.forEach(function (_a) {

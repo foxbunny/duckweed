@@ -3,11 +3,11 @@
  * All rights reserved.
  */
 
-import {VNode} from "snabbdom/vnode";
+import {VNode} from 'snabbdom/vnode';
 
-import * as events from "./events";
-import html, {GenericProps} from "./html";
-import runner, {ViewFunction} from "./runner";
+import * as events from './events';
+import html, {GenericProps} from './html';
+import runner, {ViewFunction} from './runner';
 
 declare global {
   namespace JSX {

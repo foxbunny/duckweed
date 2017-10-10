@@ -6,23 +6,26 @@
  *
  */
 
-import {Module} from "snabbdom/modules/module";
-import {VNode, VNodeData} from "snabbdom/vnode";
+import {Module} from 'snabbdom/modules/module';
+import {VNode, VNodeData} from 'snabbdom/vnode';
+
 
 type Off = {
-  [N in keyof HTMLElementEventMap]?: (ev: HTMLElementEventMap[N]) => void;
+  [N in keyof HTMLElementEventMap]?: (ev: HTMLElementEventMap[N]) => void
 } & {
-  [event: string]: EventListener;
+  [event: string]: EventListener,
 };
 
+
 const invokeHandler = (handler: any, vnode?: VNode, event?: Event): any => {
-  if (typeof handler === "function") {
+  if (typeof handler === 'function') {
     handler.call(vnode, event, vnode);
   } else {
     const [func, ...args] = handler;
     func.call(vnode, ...args, event, vnode);
   }
 };
+
 
 const handleEvent = (event: Event, vnode: VNode) => {
   const name = event.type;
@@ -31,6 +34,7 @@ const handleEvent = (event: Event, vnode: VNode) => {
     invokeHandler(off[name], vnode, event);
   }
 };
+
 
 const createListener = (container: Element) => {
   const handler = (event: Event) => {
@@ -43,6 +47,7 @@ const createListener = (container: Element) => {
   };
   return handler;
 };
+
 
 const updateListeners = (oldVNode: VNode, vnode: VNode): void => {
   const oldOff = (oldVNode.data as VNodeData).off;
@@ -58,8 +63,8 @@ const updateListeners = (oldVNode: VNode, vnode: VNode): void => {
   // Remove existing listeners
   if (oldOff && oldListener) {
     Object.keys(oldOff)
-      .filter((name) => !off || !(name in off))
-      .forEach((name) => {
+      .filter(name => !off || !(name in off))
+      .forEach(name => {
         document.removeEventListener(name, oldListener, false);
       });
   }
@@ -72,12 +77,13 @@ const updateListeners = (oldVNode: VNode, vnode: VNode): void => {
     listener.vnode = vnode;
     (vnode as any).offListener = listener;
     Object.keys(off)
-      .filter((name) => !oldOff || !(name in oldOff))
-      .forEach((name) => {
+      .filter(name => !oldOff || !(name in oldOff))
+      .forEach(name => {
         document.addEventListener(name, listener, false);
       });
   }
 };
+
 
 const module = {
   create: updateListeners,
@@ -85,8 +91,10 @@ const module = {
   update: updateListeners,
 } as Module;
 
+
 export {
   Off,
   module,
 };
+
 export default module;
