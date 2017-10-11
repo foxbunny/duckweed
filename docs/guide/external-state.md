@@ -2,7 +2,7 @@
 
 Your application is, essentially, a view which is a function of the application
 state. Application state is normally expressed as the application model, but
-Duckweed won't prevent you from using some other form of expression.
+Duckweed won't prevent you from using some other source of state.
 
 For the purpose of this guide, we use the terms 'external' state to mean 'state
 that is not part of the model', and 'internal state' as 'state that is in the
@@ -12,7 +12,7 @@ model'.
 
 Ideally, everything your application 'knows' about itself and the data user is
 working with should be stored in the internal state, the model. This is ideal,
-because the the views can be made pure (side-effect free), and that immensely
+because the the views can be made pure (side-effect free), which immensely
 simplifies our lives.
 
 This is a topic that deserves an entire tome for itself, so we won't go into the
@@ -21,8 +21,8 @@ keeping as much purity in the view as possible, we ensure that the views can be
 easily tested, and will work *predictably*, resulting in much simpler code which
 can be easily maintained and extended.
 
-To sum it up, for any given model state, the view should *always* render the
-exact same VNODEs.
+To put it shortly, for any given model state, the view should *always* render
+the exact same VNODEs.
 
 That is not always easy, however. There is always state that is maintained
 elsewhere. For example, some state is maintained in a server-side database,
@@ -46,13 +46,13 @@ This is depicted in the following diagram:
 
 Actions are triggered by event handlers, which, in turn, provide information
 about the external state (e.g., current URL in the address bar, information
-about the mouse cursor, etc). Actions can convert such state into internal state
-and let the view work with it, instead of performing the conversion at render
-time. Actions can also fetch data from `localStorage` or perform XHR requests in
-order to synchronize external and internal state.
+about the mouse cursor, etc.). Instead of performing the conversion at render
+time, actions can convert such state into internal state and let the view work
+with it.
 
 Actions merge the internal and external state and may also affect the external
-state while they're at it.
+state while they're at it. Actions can fetch data from `localStorage` or perform
+XHR requests in order to synchronize external and internal state.
 
 This internalization of external state is very important when developing
 Duckweed applications.
@@ -81,8 +81,8 @@ As a rule of the thumb, always work with arguments that are passed to your
 function and nothing else.
 
 Even if you absolutely have to use something like `location.pathname`, try
-making that a default value of your function's paramater, and work with the
+making that a default value of your function's parameter, and work with the
 parameter instead. This is a good compromise because it allows us to override it
-as needed (e.g., in tests.).
+as needed (e.g., in tests).
 
 [Documentation index](../main.md) | [Next topic](./middleware.md)

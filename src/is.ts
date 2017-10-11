@@ -31,6 +31,9 @@ const vnode = (vn): vn is VNode =>
 const pathData = (data): data is PathData =>
   typeof data === 'object' && typeof data.pathname === 'string';
 
+const promise = <T = any> (p): p is Promise<T> =>
+  p instanceof Promise;
+
 export {
   str,
   input,
@@ -40,4 +43,5 @@ export {
   inputEvent,
   vnode,
   pathData,
+  promise,
 };

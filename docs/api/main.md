@@ -7,8 +7,7 @@ coverage, look at the [Developers guide](../guide/main.md) section.
   - [`runner()`](./runner.md)
   - [`html()`](./html.md)
   - [`events`](./events.md)
-- Actions
-  - [`patch`](./patch.md)
+  - [`scoped`](./scoped.md)
 - Views
   - [`act`](./act.md)
 - Utilities

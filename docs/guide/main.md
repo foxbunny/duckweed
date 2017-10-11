@@ -1,6 +1,6 @@
 # Developer guide
 
-The developer guide contains documentation in narative format that covers the
+The developer guide contains documentation in narrative format that covers the
 more HOWTO aspects of developing with Duckweed. For the dry technical topics,
 please refer to the [API reference](../api/main.md).
 
@@ -16,5 +16,6 @@ The following topics are covered:
 - [Writing middleware functions](./middleware.md)
 - [Writing plugins](./plugins.md)
 - [Testing Duckweed applications](./testing.md)
+- [Performance optimizations](./perf.md)
 
 [Documentation index](../main.md)

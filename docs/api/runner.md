@@ -1,7 +1,7 @@
 # `duckweed.runner()`
 
 ```javascript
-(model, actions, view, options) => undefined
+(model, update, view, options) => undefined
 ```
 
 The runner function kick-starts a Duckweed application. It takes the following
@@ -10,7 +10,7 @@ arguments.
  param       | type            | description
 -------------|-----------------|---------------------------------------
  model       | any type        | The initial application state
- actions     | object          | Mapping from key to message handler
+ update      | function        | Model update function
  view        | function        | View function
  options     | object          | Runner options
 
@@ -20,46 +20,58 @@ Model can be any value or even `undefined` and `null`. Note that this object is
 generally not mutated but replaced when actions call a [`patch()`](./patch.md)
 function, so it only represents the initial state of the application.
 
-## Actions
+## Update
 
-The actions object represents a mapping between action address (the first
-element in a message), and the message handler. The message handler function has
-the following signature:
+The model update function takes a model and a message and returns either an
+updated copy of the, or a two-tuple (an array with two members) containing an
+updated copy of a model and a message or a promise that resolves to a message.
 
 ```javascript
-(patch, [...data]) => undefined
+(model, address, ...args) => model
+(model, address, ...args) => [model, message]
+(model, address, ...args) => [model, Promise<message>]
 ```
 
-The message handler function can be either sync or async. Duckweed will not use
-its return value and it, therefore, does not care if we use an async function.
+The message is a series of arguments starting with the address, and followed by
+zero or more extra arguments depending on how the message was sent (see the
+[`act()` API documentation](../api/act.md`).
 
-The first argument is always the [`patch()`](./patch.md) function which is used
-to *patch* the model. This function can be called multiple times within the
-message handler, so we can use it to set intermediate states during asyncrhonous
-operations.
+For brevity, the sum of all possible return values from the update function is
+called 'model-action'.
 
-Here's an example:
+Here's a few examples:
 
 ```javascript
-const actions = {
-  getData: async (patch, recordId) => {
-    patch((model) => ({
-      ...model,
-      loading: true,
-    }));
-    const response = await xhr.get("/data/" + recordId);
-    patch((model) => ({
-      ...model,
-      loading: false,
-      data: response.json,
-    }));
-  },
+const update = (model, action, ...args) => {
+  switch (action) {
+    case 'hide':
+      return {...model, shown: false};
+    case 'show':
+      return {...model, shown: true};
+    case 'toggle':
+      return {...model, shown: !model.shown};
+    case 'submit':
+      const [name, msg] = args;
+      return [
+        {...model, loading: true, error: false},
+        xhr.send('/comment', {name, msg})  // returns a Promise
+          .then((resp) => ['finishSubmit', resp])
+          .catch(() => ['failSubmit'])
+      ]
+    case 'finishSubmit':
+      const [comments] = args;
+      return {...model, loading: false, comments: comments}
+    case 'failSubmit':
+      return {...model, loading: false, error: true}
+    default:  // no-op
+      return model;
+  };
 };
 ```
 
-When the message handler is handling DOM events or Snabbdom hooks, it may
-receive additional arguments (event object, `VNode` objects, etc) if we are
-using the [`duckweed.html()`](./html.md) factory to generate our VDOM.
+When the update function is handling DOM events or Snabbdom hooks, and we are
+using the [`duckweed.html()`](./html.md) factory function, the update function
+may receive additional arguments (event object, `VNode` objects, etc).
 
 ## View
 
@@ -77,12 +89,14 @@ the action handler (yes, bad name), which can be used to transmit messages.
 
 The runner takes the following options:
 
-interface RunnerOptions {
+```javascript
+type RunnerOptions {
   root?: string | Element | VNode;
   patch?: VDOMPatchFunction;
   plugins?: Plugin[];
   middleware?: PatchMiddleware[];
 }
+```
 
 ### `root` (string, `Element`, or `VNode`)
 
@@ -108,13 +122,14 @@ documentation.
 The default value comes from the `duckweed/html` module, and uses the following
 Snabbdom and Duckweed modules:
 
-- snabbdom/modules/class
-- snabbdom/modules/eventlisteners
-- snabbdom/modules/props
-- snabbdom/modules/style
-- duckweed/modules/offevents
-- duckweed/modules/keyevents
-- duckweed/modules/routeevents
+- `snabbdom/modules/class`
+- `snabbdom/modules/eventlisteners`
+- `snabbdom/modules/props`
+- `snabbdom/modules/style`
+- `duckweed/modules/offevents`
+- `duckweed/modules/keyevents`
+- `duckweed/modules/docevents`
+- `duckweed/modules/routeevents`
 
 See the [Non-standard events](../guide/non-standard-events) guide for more
 information on what the Duckweed modules do.
@@ -127,14 +142,14 @@ Plugin objects have the following structure:
 
 ```javascript
 {
-  actions: object,
-  init(act) => undefined
+  update: UpdateFunction,
+  init: (act, state) => undefined
 }
 ```
 
-The `actions` object has the same strucutre as `actions` passed to the runner.
-The init function takes a message handler and is invoked once right before the
-first render.
+The `update` function is the same as the update function discussed in the Update
+section above. The init function takes a message handler and is invoked once
+right before the first render.
 
 See the [Writing plugins](../guide/plugins.md) for more information on how to
 write plugins.
@@ -146,18 +161,17 @@ write plugins.
 Middleware functions have the following signature:
 
 ```javascript
-(patchFunction) => (model) => model
+updateFunction => UpdateFunction
 ```
 
-The middlware functions take a patch function, which receives a model and
-returns a patched model, and returns a patch function with modified behavior.
+The middleware functions take an update function function, which receives a
+model, and a message and returns a model-action. It returns a new update
+function that will be used by the runner instead.
 
-The middleware functions will be piped (first to last) such that when
-[`patch()`](./patch.md) is invoked in a message handler, the call goes from the
-first middleware to last, then through the actual patch callback, and back up to
-the first middleware.
+The middleware functions are piped so that the first one in the array will be
+the first one to directly handle the user-supplied update function.
 
-See [Writing middlware](../guide/middlware.md) guide for more information.
+See [Writing middleware](../guide/middlware.md) guide for more information.
 
 **default:** `[]`
 

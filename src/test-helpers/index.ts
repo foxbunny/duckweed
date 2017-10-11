@@ -3,7 +3,7 @@
  * All rights reserved.
  */
 
-import {PatchFunction} from '../runner';
+import {UpdateFunction} from '../runner';
 
 
 /**
@@ -36,10 +36,10 @@ const modelSnapshotter = (modelSnapshots =>
     clear() {
       modelSnapshots = [];
     },
-    middleware(fn: PatchFunction) {
-      return (model: any) => {
+    middleware(fn: UpdateFunction) {
+      return (model, address, ...args) => {
         const before = model;
-        const after = fn(model);
+        const after = fn(model, address, ...args);
         modelSnapshots.push([before, after]);
         return after;
       };

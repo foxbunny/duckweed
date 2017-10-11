@@ -9,187 +9,136 @@ import {patch as duckweedPatch} from './html';
 import * as is from './is';
 
 
-type PatchFunction<T = any> = (model: T) => T;
-type Scope = Array<string | number>;
-type ModelPatcher<T = any> = {
-  (fn: PatchFunction<T>): void,
-  as<S = any>(scope: Scope, callback?: (model: T) => T): ModelPatcher<S>,
-};
-type Actions<T = any> = {
-  [action: string]: (patch: ModelPatcher<T>, ...args) => void | Promise<void>,
-};
-type ActionHandler = {
-  (...message): (...eventArgs) => any,
-  prefix: any[],
-  as(...message): ActionHandler,
-};
+type Message = any[];
+
+type NormalizedModelAction<T = any> = [T, Message | Promise<Message> | undefined];
+
+type UpdateFunction<T = any> =  (model: T, address: string | number, ...args) => T | NormalizedModelAction;
+
+type NormalizedUpdateFunction<T = any> = (model: T, address: string | number, ...args) => NormalizedModelAction;
+
+type ActionTrigger = (address, ...message) => (...eventArgs) => any;
+
 type Props = {
   model,
-  act: ActionHandler,
+  act: ActionTrigger,
 };
+
 type ViewFunction = (props: Props) => VNode;
-type RenderFunction = (handler: ActionHandler) => void;
-type PatchMiddleware = (fn: PatchFunction) => PatchFunction;
+
+type RenderFunction = (trigger: ActionTrigger) => void;
+
+type UpdateMiddleware = (fn: NormalizedUpdateFunction) => NormalizedUpdateFunction;
+
 type RunnerState<T = any> = {
   vnodes: Element | VNode,
   model: T,
   nextRenderId: null | number,
 };
-type Plugin = {
-  actions: Actions<any>,
-  init(act: (...args) => void, state: RunnerState): void,
+
+type Plugin<T = any> = {
+  update: UpdateFunction,
+  init: (act: ActionTrigger, state: RunnerState<T>) => void,
 };
+
 type VDOMPatchFunction = (oldVnode: Element | VNode, vnode: VNode) => VNode;
+
 type RunnerOptions = {
   root?: string | Element | VNode,
   patch?: VDOMPatchFunction,
   plugins?: Plugin[],
-  middleware?: PatchMiddleware[],
+  middleware?: UpdateMiddleware[],
 };
 
 
-const identity = <T = any> (x: T): T => x;
-
-/**
- * Clears the timer if one was set by the patch function.
- */
-const cancelNextRender = (state: RunnerState): void => {
-  if (state.nextRenderId) {
-    clearTimeout(state.nextRenderId);
-    state.nextRenderId = null;
-  }
-};
+// UTILITY FUNCTIONS
 
 
-/**
- * Cancel the next-scheduled render, and reschedule another render
- */
-const setNextRender = (state: RunnerState, render: RenderFunction): void => {
-  cancelNextRender(state);
-  state.nextRenderId = setTimeout(render);
-};
+const identity = x => x;
+
+
+const pipe = fns => fns.reduce((f, g) => (...args) => f(g(...args)), identity);
+
+
+// RENDERING FUNCTIONS
 
 
 /**
  * Create a renderer function
  *
  * The renderer function will keep updating the vnodes stored in the runner
- * state using a specified view function.
+ * state using a specified view function. It does so asyncrhonously using the
+ * setTimeout function, and it will cancel the previous timeout if called
+ * multiple times in a row..
  */
-const createRenderer = (state: RunnerState, patch: VDOMPatchFunction, view: ViewFunction) =>
-  (actionHandler: ActionHandler) => {
-    state.vnodes = patch(state.vnodes, view({model: state.model, act: actionHandler} as Props));
-    state.nextRenderId = null;
+const createRenderer = <T = any> (
+  state: RunnerState<T>,
+  patch: VDOMPatchFunction,
+  view: ViewFunction,
+): RenderFunction =>
+  (trigger: ActionTrigger) => {
+    if (state.nextRenderId) {
+      clearTimeout(state.nextRenderId);
+      state.nextRenderId = null;
+    }
+    state.nextRenderId = setTimeout(() => {
+      state.vnodes = patch(state.vnodes, view({model: state.model, act: trigger} as Props));
+      state.nextRenderId = null;
+    });
   };
 
 
+
+// ACTION-RELATED FUNCTIONS
+
+
 /**
- * Retrieves the value within an object, at given scope.
+ * Convert the output of the update function into a model-action two-tuple
  */
-const scopeGet = (scope: Array<string | number>, object) =>
-  scope.length
-    ? scopeGet(scope.slice(1), object[scope[0]])
-    : object;
+const modelAction = <T = any> (ret: T | NormalizedModelAction<T>): NormalizedModelAction<T> =>
+Array.isArray(ret) ? ret : [ret, undefined];
 
 
 /**
- * Returns a copy of the object with the value assigned to the property at specified scope
- */
-const scopeSet = (scope: Scope, val, object) =>
-  scope.length
-    ? (([first, ...rest]) =>
-        Array.isArray(object)
-          ? (() => {
-              const copy = object.concat([]);
-              copy[first as number] = scopeSet(rest, val, copy[first as number]);
-              return copy;
-            })()
-          : {...object, [first]: scopeSet(rest, val, object[first])}
-      )(scope)
-    : val;
-
-
-const scopePatch = (scope: Scope, fn: (arg) => any, object) =>
-  scopeSet(scope, fn(scopeGet(scope, object)), object);
-
-
-const createPatcher = <T = any>(
-  state: RunnerState,
-  middleware: PatchMiddleware,
-  patchCallback: () => void,
-  scope: Scope = [],
-  parentScope: Scope = [],
-  scopeCallback: ((model) => any) = identity,
-): ModelPatcher<T> => {
-
-  const mutate: PatchMiddleware = (fn: PatchFunction<T>) => model =>
-    (updated => scopePatch(parentScope, scopeCallback, updated)
-    )(scope ? scopePatch(scope, fn, model) : fn(model));
-
-  const patcher = (fn: PatchFunction<T>) => {
-    const updatedModel = middleware(mutate(fn))(state.model);
-    if (updatedModel === state.model) {
-      // When these are identical, the application state hasn't changed at all,
-      // so we won't do anything else.
-      return;
-    }
-    state.model = updatedModel;
-    patchCallback();
-  };
-
-  (patcher as any).as = <S = any>(childScope: Scope, parentCallback: (model: T) => T): ModelPatcher<S> =>
-    (patcherScope => createPatcher(state, middleware, patchCallback, patcherScope, scope, parentCallback)
-    )(scope ? scope.concat(childScope) : childScope);
-
-  return patcher as ModelPatcher<T>;
-};
-
-
-const actionHandlerFactory = (patcher: ModelPatcher, actions: Actions, prefix = []): ActionHandler => {
-  const handler = (...args) => (...eventArgs) => {
-    const [action, ...actionArgs] = prefix.concat(args, eventArgs);
-    if (action == null) {
-      return;
-    }
-    const actionFn = actions[action];
-    if (!actionFn) {
-      throw Error(`No action found for message [${action}, ${actionArgs.join(', ')}]`);
-    }
-    actionFn(patcher, ...actionArgs);
-  };
-
-  (handler as any).as = (...args) => actionHandlerFactory(patcher, actions, prefix.concat(args));
-
-  (handler as any).prefix = prefix;
-
-  return handler as ActionHandler;
-};
-
-
-/**
- * Create an action handler
+ * Create an action trigger function
  *
- * Action handler is a proxy event/hook handler factory which allows the user to
- * specify messages which will then be tied to action handlers when the events
- * trigger.
- *
- * A message consists of an action identifier, and zero or more arbitrary
- * user-specified arguments. The message is specified in the prop, and it is
- * passed to the action handler, which returns an event handler that is used by
- * Snabbdom to handle the events. When an event is triggered, the control is
- * returned to the action handler which uses the original message to determine
- * which action handler will be invoked.
+ * The created function is used in the view to trigger actions by sending
+ * messages. The action triggers drive the application by updating the model and
+ * performing renders using the provided render function, so it can be
+ * considered the pumping heart of a duckweed app.
  */
-const createActionHandler = <T = any>(
-  state: RunnerState,
-  actions: Actions<T>,
+const createActionTrigger = <T = any> (
+  state: RunnerState<T>,
+  update: NormalizedUpdateFunction<T>,
   render: RenderFunction,
-  middleware: PatchMiddleware,
-): ActionHandler => {
-  const patcher = createPatcher(state, middleware, () => setNextRender(state, () => render(handler)));
-  const handler = actionHandlerFactory(patcher, actions);
-  return handler;
+): ActionTrigger => {
+  const trigger = (address, ...args) => (...eventArgs) => {
+    const [model, message] = update(state.model, address, ...args, ...eventArgs);
+    const hasChanged = model !== state.model;
+    state.model = model;
+
+    if (is.promise(message)) {
+      // Update returned a promise that should resolve to a message.
+      message.then(([address1, ...args1]) => trigger(address1, ...args1)());
+
+    } else if (message) {
+      // Update returned an message that is not a promise.
+      const [address1, ...args1] = message;
+      trigger(address1, ...args1)();
+    }
+
+    if (hasChanged) {
+      // Only render if the model has been modified.
+      render(trigger);
+    }
+  };
+  return trigger;
 };
+
+
+
+// THE RUNNER
+
 
 
 const DEFAULT_OPTIONS: RunnerOptions = {
@@ -206,7 +155,7 @@ const DEFAULT_OPTIONS: RunnerOptions = {
  * The runner function takes a model, actions mapping, view function, and an
  * an object containing runner options, and kick starts the app.
  */
-const runner = <T = any> (model: T, actions: Actions<T>, view: ViewFunction, options: RunnerOptions = {}) => {
+const runner = <T = any> (model: T, update: UpdateFunction<T>, view: ViewFunction, options: RunnerOptions = {}) => {
   const opt = {
     ...DEFAULT_OPTIONS,
     ...options,
@@ -218,41 +167,27 @@ const runner = <T = any> (model: T, actions: Actions<T>, view: ViewFunction, opt
     vnodes: is.str(opt.root) ? (document.querySelector(opt.root) as Element) : opt.root as Element | VNode,
   };
 
-  // Collect plugin actions
-  const pluginActions = (opt.plugins as Plugin[]).reduce((ps, p) => ({...ps, ...p.actions}), {});
-
-  // Prepare the engine
-  const middlewareStack = (opt.middleware as PatchMiddleware[])
-    .reduce((m1, m2) => fn => m1(m2(fn)), identity);
-
   const render = createRenderer(state, opt.patch as VDOMPatchFunction, view);
-
-  const actionHandler = createActionHandler<T>(
-    state,
-    {...pluginActions, ...actions},
-    render,
-    middlewareStack,
+  const middleware = pipe(opt.middleware);
+  const update1 = middleware((m, a, ...args) => modelAction<T>(update(m, a, ...args)));
+  const actionTrigger = createActionTrigger<T>(state, update1, render);
+  opt.plugins.forEach(plugin =>
+    (act => plugin.init(act, state)
+    )(createActionTrigger<T>(state, plugin.update, render)),
   );
 
-  const pluginActionHandler = (...args) => actionHandler(...args)();
-
-  // Init plugins
-  (opt.plugins as Plugin[]).forEach(({init}) => {
-    init(pluginActionHandler, state);
-  });
-
   // Start rendering
-  render(actionHandler);
+  render(actionTrigger);
 };
 
 
 export {
-  PatchFunction,
-  Scope,
-  ModelPatcher,
-  Actions,
-  ActionHandler,
-  PatchMiddleware,
+  Message,
+  NormalizedModelAction,
+  UpdateFunction,
+  NormalizedUpdateFunction,
+  ActionTrigger,
+  UpdateMiddleware,
   Props,
   ViewFunction,
   RunnerState,

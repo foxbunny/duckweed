@@ -1,166 +1,155 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`runner Should accept a plugin which can control the app from within the runner 1`] = `
+exports[`runner should allow multiple middleware to be composed 1`] = `
 <div>
-  Pluginized
+  <span>
+    base-middleware1-middleware2
+  </span>
+  <a
+    href="/foo"
+  >
+    clickme
+  </a>
 </div>
 `;
 
-exports[`runner Should pass the model to the view as props 1`] = `
+exports[`runner should be able to send additional actions as promises 1`] = `
 <div>
-  Hello, model
-</div>
-`;
-
-exports[`runner Should provide a way to create scoped patchers 1`] = `
-Array [
-  Array [
-    Object {
-      "list": Object {
-        "counters": Array [
-          Object {
-            "count": 0,
-          },
-          Object {
-            "count": 0,
-          },
-          Object {
-            "count": 0,
-          },
-          Object {
-            "count": 0,
-          },
-        ],
-        "total": 0,
-      },
-    },
-    Object {
-      "list": Object {
-        "counters": Array [
-          Object {
-            "count": 1,
-          },
-          Object {
-            "count": 0,
-          },
-          Object {
-            "count": 0,
-          },
-          Object {
-            "count": 0,
-          },
-        ],
-        "total": 1,
-      },
-    },
-  ],
-  Array [
-    Object {
-      "list": Object {
-        "counters": Array [
-          Object {
-            "count": 1,
-          },
-          Object {
-            "count": 0,
-          },
-          Object {
-            "count": 0,
-          },
-          Object {
-            "count": 0,
-          },
-        ],
-        "total": 1,
-      },
-    },
-    Object {
-      "list": Object {
-        "counters": Array [
-          Object {
-            "count": 1,
-          },
-          Object {
-            "count": 1,
-          },
-          Object {
-            "count": 0,
-          },
-          Object {
-            "count": 0,
-          },
-        ],
-        "total": 2,
-      },
-    },
-  ],
-  Array [
-    Object {
-      "list": Object {
-        "counters": Array [
-          Object {
-            "count": 1,
-          },
-          Object {
-            "count": 1,
-          },
-          Object {
-            "count": 0,
-          },
-          Object {
-            "count": 0,
-          },
-        ],
-        "total": 2,
-      },
-    },
-    Object {
-      "list": Object {
-        "counters": Array [
-          Object {
-            "count": 1,
-          },
-          Object {
-            "count": 1,
-          },
-          Object {
-            "count": 1,
-          },
-          Object {
-            "count": 0,
-          },
-        ],
-        "total": 3,
-      },
-    },
-  ],
-]
-`;
-
-exports[`runner Should render the initial view 1`] = `
-<div>
-  Hello, root
-</div>
-`;
-
-exports[`runner Should rerender after action patches the model 1`] = `
-<div>
+  <span>
+    model
+  </span>
   <span>
     0
   </span>
   <a
     href="/foo"
-  />
+  >
+    clickme
+  </a>
 </div>
 `;
 
-exports[`runner Should rerender after action patches the model 2`] = `
+exports[`runner should be able to send additional actions as promises 2`] = `
 <div>
   <span>
-    2
+    bar
+  </span>
+  <span>
+    1
   </span>
   <a
     href="/foo"
-  />
+  >
+    clickme
+  </a>
+</div>
+`;
+
+exports[`runner should be able to send additional actions from an action 1`] = `
+<div>
+  <span>
+    model
+  </span>
+  <span>
+    0
+  </span>
+  <a
+    href="/foo"
+  >
+    clickme
+  </a>
+</div>
+`;
+
+exports[`runner should be able to send additional actions from an action 2`] = `
+<div>
+  <span>
+    bar
+  </span>
+  <span>
+    1
+  </span>
+  <a
+    href="/foo"
+  >
+    clickme
+  </a>
+</div>
+`;
+
+exports[`runner should be able to use actions to modify the model 1`] = `
+<div>
+  <span>
+    model
+  </span>
+  <a
+    href="/foo"
+  >
+    clickme
+  </a>
+</div>
+`;
+
+exports[`runner should be able to use actions to modify the model 2`] = `
+<div>
+  <span>
+    action
+  </span>
+  <a
+    href="/foo"
+  >
+    clickme
+  </a>
+</div>
+`;
+
+exports[`runner should be able to use additional arguments in actions 1`] = `
+<div>
+  <span>
+    model
+  </span>
+  <a
+    href="/foo"
+  >
+    clickme
+  </a>
+</div>
+`;
+
+exports[`runner should be able to use additional arguments in actions 2`] = `
+<div>
+  <span>
+    bar
+  </span>
+  <a
+    href="/foo"
+  >
+    clickme
+  </a>
+</div>
+`;
+
+exports[`runner should pass the model to the view as props 1`] = `
+<div>
+  Hello, model
+</div>
+`;
+
+exports[`runner should render the initial view 1`] = `
+<div>
+  Hello, root
+</div>
+`;
+
+exports[`runner should take middleware functions that modify update behavior 1`] = `
+<div>
+  <span>
+    middleware
+  </span>
+  <a
+    href="/foo"
+  >
+    clickme
+  </a>
 </div>
 `;

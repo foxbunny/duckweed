@@ -8,6 +8,7 @@ import {VNode} from 'snabbdom/vnode';
 import * as events from './events';
 import html, {GenericProps} from './html';
 import runner, {ViewFunction} from './runner';
+import * as scoped from './scoped';
 
 declare global {
   namespace JSX {
@@ -24,4 +25,5 @@ export {
   html,
   runner,
   events,
+  scoped,
 };

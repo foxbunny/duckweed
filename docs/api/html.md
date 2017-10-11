@@ -67,7 +67,7 @@ html("div", {class: {menu: true, open: model.isOpen}});
 
 The `on` prop is used to bind event handlers. It should be an object which maps
 event names to the respective handlers. It is handled by the Snabbdom's
-[eventlisteners
+[`eventlisteners`
 module](https://github.com/snabbdom/snabbdom#eventlisteners-module).
 
 For convenience, `html()` also understands `on`-prefixed props, like `on-input`

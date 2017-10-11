@@ -14,17 +14,20 @@ interface should be rendered, and also how events should be translated into
 messages.
 
 Once a view is rendered, it will react to user input, and various other events
-(hooks, navigation, etc). Whenever an event happens, a **message** is
+(hooks, navigation, etc.). Whenever an event happens, a **message** is
 transmitted. The message consists of an address (action name), and arbitrary
 data.
 
-When a matching **action** is found, it receives the message's data, and it can
-act on it. Typically, an action modifies the application state by patching the
-model.
+When the update function is invoked, it takes an **action** based on the
+message's address. It also receives the message's data, and it can act on it.
+Typically, an action modifies the application state by patching the model.
+
+Besides patching the model, actions can also send messages, either synchronously
+or asynchronously. This allows **action composition**.
 
 In Duckweed, model patching is done by returning a modified copy of the model
-which is to replace the existing state.
+which is to replace the existing model.
 
-Once the state is modified, the cycle repeats.
+Once the model is modified, the cycle repeats.
 
 [Documentation index](../main.md) | [Next topic](./composition.md)

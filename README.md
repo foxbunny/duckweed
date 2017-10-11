@@ -54,13 +54,16 @@ Here you go:
 class HelloDuckweed {
   constructor(initialState = {}) {
     this.state = initialState;
-    this.updateName = this.updateName.bind(this);
+    this.update = this.update.bind(this);
     this.render = this.render.bind(this);
   }
 
-  updateName(patch, e) {
+  update(_, address, ...args) {
+    return this[address](...args);
+  }
+
+  updateName(e) {
     this.state.name = e.target.value;
-    patch(() => {});
   }
 
   render({act}) {
@@ -75,12 +78,11 @@ class HelloDuckweed {
 
 const comp = new HelloDuckweed();
 
-duckweed.runner(undefined, comp, comp.render);
+duckweed.runner(undefined, comp.update, comp.render);
 ```
 
-No, sorry, it was just a joke. I'm pretty sure it would work, but I don't even
-want to imagine what horrible composition nightmare this would introduce. Use
-React, Angular, or Vue if you want class-based components.
+No, sorry, it was just a joke. I'm pretty sure it would work, but, to be honest,
+I designed Duckweed specifically to avoid using this pattern.
 
 # What's with the name?
 
@@ -98,7 +100,12 @@ It's... erm... fast enough. :)
 # Under construction
 
 Duckweed is still in very very early stages of development. Don't expect it to
-be production-ready.
+be production-ready. The API may also fluctuate between versions. The level of
+breakage you can expect is predictable, though.
+
+Duckweed uses semantic versioning, so no major problems should be expected until
+the next major version bump. Each time a major version is bumped, though, you
+can be certain it's backwards-incompatible with the previous verisons.
 
 # License
 

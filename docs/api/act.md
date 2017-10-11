@@ -20,8 +20,17 @@ const view = ({act}) => (
 
 ## Scoped act
 
-The `act()` function also has a method, `as()` which is used in [module
-composition](../guide/composition.md). It takes the same arguments as `act()`
-itself, but returns a scoped version of `act()`.
+To create 'scoped' `act()` function, you can simply partially apply it using the
+`bind()` function. For example:
+
+```javascript
+const view = ({act}) => (
+  html("div", {}, [
+    html("button", {"on-click": act("go", "left")}, "<-"),
+    html("button", {"on-click": act("go", "right")}, "->"),
+    someViewFunc({act: act.bind(null, 'foo')}),
+  ])
+);
+```
 
 [Documentation index](../main.md) | [API reference index](./main.md)

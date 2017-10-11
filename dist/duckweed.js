@@ -181,6 +181,10 @@ var pathData = function (data) {
     return typeof data === 'object' && typeof data.pathname === 'string';
 };
 exports.pathData = pathData;
+var promise = function (p) {
+    return p instanceof Promise;
+};
+exports.promise = promise;
 
 
 /***/ }),
@@ -377,6 +381,8 @@ var html_1 = __webpack_require__(2);
 exports.html = html_1.default;
 var runner_1 = __webpack_require__(22);
 exports.runner = runner_1.default;
+var scoped = __webpack_require__(23);
+exports.scoped = scoped;
 
 
 /***/ }),
@@ -1875,138 +1881,86 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var html_1 = __webpack_require__(2);
 var is = __webpack_require__(1);
+// UTILITY FUNCTIONS
 var identity = function (x) { return x; };
-/**
- * Clears the timer if one was set by the patch function.
- */
-var cancelNextRender = function (state) {
-    if (state.nextRenderId) {
-        clearTimeout(state.nextRenderId);
-        state.nextRenderId = null;
+var pipe = function (fns) { return fns.reduce(function (f, g) { return function () {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
     }
-};
-/**
- * Cancel the next-scheduled render, and reschedule another render
- */
-var setNextRender = function (state, render) {
-    cancelNextRender(state);
-    state.nextRenderId = setTimeout(render);
-};
+    return f(g.apply(void 0, args));
+}; }, identity); };
+// RENDERING FUNCTIONS
 /**
  * Create a renderer function
  *
  * The renderer function will keep updating the vnodes stored in the runner
- * state using a specified view function.
+ * state using a specified view function. It does so asyncrhonously using the
+ * setTimeout function, and it will cancel the previous timeout if called
+ * multiple times in a row..
  */
 var createRenderer = function (state, patch, view) {
-    return function (actionHandler) {
-        state.vnodes = patch(state.vnodes, view({ model: state.model, act: actionHandler }));
-        state.nextRenderId = null;
-    };
-};
-/**
- * Retrieves the value within an object, at given scope.
- */
-var scopeGet = function (scope, object) {
-    return scope.length
-        ? scopeGet(scope.slice(1), object[scope[0]])
-        : object;
-};
-/**
- * Returns a copy of the object with the value assigned to the property at specified scope
- */
-var scopeSet = function (scope, val, object) {
-    return scope.length
-        ? (function (_a) {
-            var first = _a[0], rest = _a.slice(1);
-            return Array.isArray(object)
-                ? (function () {
-                    var copy = object.concat([]);
-                    copy[first] = scopeSet(rest, val, copy[first]);
-                    return copy;
-                })()
-                : __assign({}, object, (_b = {}, _b[first] = scopeSet(rest, val, object[first]), _b));
-            var _b;
-        })(scope)
-        : val;
-};
-var scopePatch = function (scope, fn, object) {
-    return scopeSet(scope, fn(scopeGet(scope, object)), object);
-};
-var createPatcher = function (state, middleware, patchCallback, scope, parentScope, scopeCallback) {
-    if (scope === void 0) { scope = []; }
-    if (parentScope === void 0) { parentScope = []; }
-    if (scopeCallback === void 0) { scopeCallback = identity; }
-    var mutate = function (fn) { return function (model) {
-        return (function (updated) { return scopePatch(parentScope, scopeCallback, updated); })(scope ? scopePatch(scope, fn, model) : fn(model));
-    }; };
-    var patcher = function (fn) {
-        var updatedModel = middleware(mutate(fn))(state.model);
-        if (updatedModel === state.model) {
-            // When these are identical, the application state hasn't changed at all,
-            // so we won't do anything else.
-            return;
+    return function (trigger) {
+        if (state.nextRenderId) {
+            clearTimeout(state.nextRenderId);
+            state.nextRenderId = null;
         }
-        state.model = updatedModel;
-        patchCallback();
+        state.nextRenderId = setTimeout(function () {
+            state.vnodes = patch(state.vnodes, view({ model: state.model, act: trigger }));
+            state.nextRenderId = null;
+        });
     };
-    patcher.as = function (childScope, parentCallback) {
-        return (function (patcherScope) { return createPatcher(state, middleware, patchCallback, patcherScope, scope, parentCallback); })(scope ? scope.concat(childScope) : childScope);
-    };
-    return patcher;
 };
-var actionHandlerFactory = function (patcher, actions, prefix) {
-    if (prefix === void 0) { prefix = []; }
-    var handler = function () {
+// ACTION-RELATED FUNCTIONS
+/**
+ * Convert the output of the update function into a model-action two-tuple
+ */
+var modelAction = function (ret) {
+    return Array.isArray(ret) ? ret : [ret, undefined];
+};
+/**
+ * Create an action trigger function
+ *
+ * The created function is used in the view to trigger actions by sending
+ * messages. The action triggers drive the application by updating the model and
+ * performing renders using the provided render function, so it can be
+ * considered the pumping heart of a duckweed app.
+ */
+var createActionTrigger = function (state, update, render) {
+    var trigger = function (address) {
         var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            args[_i - 1] = arguments[_i];
         }
         return function () {
             var eventArgs = [];
             for (var _i = 0; _i < arguments.length; _i++) {
                 eventArgs[_i] = arguments[_i];
             }
-            var _a = prefix.concat(args, eventArgs), action = _a[0], actionArgs = _a.slice(1);
-            if (action == null) {
-                return;
+            var _a = update.apply(void 0, [state.model, address].concat(args, eventArgs)), model = _a[0], message = _a[1];
+            var hasChanged = model !== state.model;
+            state.model = model;
+            if (is.promise(message)) {
+                // Update returned a promise that should resolve to a message.
+                message.then(function (_a) {
+                    var address1 = _a[0], args1 = _a.slice(1);
+                    return trigger.apply(void 0, [address1].concat(args1))();
+                });
             }
-            var actionFn = actions[action];
-            if (!actionFn) {
-                throw Error("No action found for message [" + action + ", " + actionArgs.join(', ') + "]");
+            else if (message) {
+                // Update returned an message that is not a promise.
+                var address1 = message[0], args1 = message.slice(1);
+                trigger.apply(void 0, [address1].concat(args1))();
             }
-            actionFn.apply(void 0, [patcher].concat(actionArgs));
+            if (hasChanged) {
+                // Only render if the model has been modified.
+                render(trigger);
+            }
         };
     };
-    handler.as = function () {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-        return actionHandlerFactory(patcher, actions, prefix.concat(args));
-    };
-    handler.prefix = prefix;
-    return handler;
+    return trigger;
 };
-/**
- * Create an action handler
- *
- * Action handler is a proxy event/hook handler factory which allows the user to
- * specify messages which will then be tied to action handlers when the events
- * trigger.
- *
- * A message consists of an action identifier, and zero or more arbitrary
- * user-specified arguments. The message is specified in the prop, and it is
- * passed to the action handler, which returns an event handler that is used by
- * Snabbdom to handle the events. When an event is triggered, the control is
- * returned to the action handler which uses the original message to determine
- * which action handler will be invoked.
- */
-var createActionHandler = function (state, actions, render, middleware) {
-    var patcher = createPatcher(state, middleware, function () { return setNextRender(state, function () { return render(handler); }); });
-    var handler = actionHandlerFactory(patcher, actions);
-    return handler;
-};
+// THE RUNNER
 var DEFAULT_OPTIONS = {
     middleware: [],
     patch: html_1.patch,
@@ -2019,7 +1973,7 @@ var DEFAULT_OPTIONS = {
  * The runner function takes a model, actions mapping, view function, and an
  * an object containing runner options, and kick starts the app.
  */
-var runner = function (model, actions, view, options) {
+var runner = function (model, update, view, options) {
     if (options === void 0) { options = {}; }
     var opt = __assign({}, DEFAULT_OPTIONS, options);
     var state = {
@@ -2027,30 +1981,83 @@ var runner = function (model, actions, view, options) {
         nextRenderId: null,
         vnodes: is.str(opt.root) ? document.querySelector(opt.root) : opt.root,
     };
-    // Collect plugin actions
-    var pluginActions = opt.plugins.reduce(function (ps, p) { return (__assign({}, ps, p.actions)); }, {});
-    // Prepare the engine
-    var middlewareStack = opt.middleware
-        .reduce(function (m1, m2) { return function (fn) { return m1(m2(fn)); }; }, identity);
     var render = createRenderer(state, opt.patch, view);
-    var actionHandler = createActionHandler(state, __assign({}, pluginActions, actions), render, middlewareStack);
-    var pluginActionHandler = function () {
+    var middleware = pipe(opt.middleware);
+    var update1 = middleware(function (m, a) {
         var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
+        for (var _i = 2; _i < arguments.length; _i++) {
+            args[_i - 2] = arguments[_i];
         }
-        return actionHandler.apply(void 0, args)();
-    };
-    // Init plugins
-    opt.plugins.forEach(function (_a) {
-        var init = _a.init;
-        init(pluginActionHandler, state);
+        return modelAction(update.apply(void 0, [m, a].concat(args)));
+    });
+    var actionTrigger = createActionTrigger(state, update1, render);
+    opt.plugins.forEach(function (plugin) {
+        return (function (act) { return plugin.init(act, state); })(createActionTrigger(state, plugin.update, render));
     });
     // Start rendering
-    render(actionHandler);
+    render(actionTrigger);
 };
 exports.runner = runner;
 exports.default = runner;
+
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * (c) 2017 Hajime Yamasaki Vukelic
+ * All rights reserved.
+ */
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Retrieves the value within an object, at given scope.
+ */
+var get = function (scope, object) {
+    return scope.length
+        ? get(scope.slice(1), object[scope[0]])
+        : object;
+};
+exports.get = get;
+/**
+ * Returns a copy of the object with the value assigned to the property at specified scope
+ */
+var set = function (scope, val, object) {
+    if (object === void 0) { object = {}; }
+    if (scope.length === 0) {
+        return val;
+    }
+    var first = scope[0], rest = scope.slice(1);
+    return Array.isArray(object)
+        ? (function (copy) {
+            copy[first] = set(rest, val, copy[first]);
+            return copy;
+        })(object.slice(0))
+        : __assign({}, object, (_a = {}, _a[first] = set(rest, val, object[first]), _a));
+    var _a;
+};
+exports.set = set;
+/**
+ * Patch a portion of an object or an array using a function
+ */
+var transform = function (scope, fn, object) {
+    var orig = get(scope, object);
+    var updated = fn(orig);
+    return orig === updated
+        ? object
+        : set(scope, updated, object);
+};
+exports.transform = transform;
 
 
 /***/ })

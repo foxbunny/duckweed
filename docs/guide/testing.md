@@ -1,6 +1,6 @@
 # Testing Duckweed applications
 
-Duckweed applications are generally neiter easy nor difficult to test. They are
+Duckweed applications are generally neither easy nor difficult to test. They are
 as hard to test as the most untestable code you have in your app. Most of your
 app is just JavaScript/TypeScript anyway.
 
@@ -70,4 +70,4 @@ Duckweed does what it does. It's a reactive view framework. Think about what
 code absolutely must depend on its API for your app to work, and put everything
 else outside Duckweed, into the pure-JavaScript land.
 
-[Documentation index](../main.md)
+[Documentation index](../main.md) | [Next topic](./perf.md)
