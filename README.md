@@ -9,14 +9,14 @@ Model-Action-View architecture**
 Duckweed is inspired by [Elm](http://elm-lang.org/) and [Simon Friis
 Vindum's](https://github.com/paldepind) [Functional Frontend
 Architecture](https://github.com/paldepind/functional-frontend-architecture).
-Unlike its sources of inspiration, though, Duckweed's parimary goal is not to
+Unlike its sources of inspiration, though, Duckweed's primary goal is not to
 promote or enforce functional programming paradigm. It's main goal is to provide
 a simple API, and functions happen to be a good step in that direction.
 
 Duckweed is written in [TypeScript](https://www.typescriptlang.org), and uses
 [Snabbdom](https://github.com/snabbdom/snabbdom) under the hood.
 
-Although Duckweed is small (only 7KB min+gz), it includes state managent,
+Although Duckweed is small (only 7KB min+gz), it includes state management,
 transitions, routing events, and the full power of Snabbdom.
 
 # Installation
@@ -105,7 +105,7 @@ breakage you can expect is predictable, though.
 
 Duckweed uses semantic versioning, so no major problems should be expected until
 the next major version bump. Each time a major version is bumped, though, you
-can be certain it's backwards-incompatible with the previous verisons.
+can be certain it's backwards-incompatible with the previous versions.
 
 # License
 
