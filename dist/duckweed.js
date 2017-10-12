@@ -405,7 +405,7 @@ var from = function (processor, handler) { return function () {
     for (var _i = 0; _i < arguments.length; _i++) {
         eventArgs[_i] = arguments[_i];
     }
-    return handler.apply(void 0, processor.apply(void 0, eventArgs));
+    return (function (args) { return args && handler.apply(void 0, args); })(processor.apply(void 0, eventArgs));
 }; };
 exports.from = from;
 /**
