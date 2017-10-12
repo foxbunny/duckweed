@@ -10,12 +10,15 @@ import props from 'snabbdom/modules/props';
 
 import * as e from './events';
 
+
 const patch = snabbdom.init([eventlisteners, props]);
+
 
 const scaffold = (elm: string, cfg: {[key: string]: any}) =>
   (vnode =>
     ((vnode.elm as any).vnode = vnode) && vnode.elm
   )(patch(document.createElement('div'), h(elm, cfg)));
+
 
 describe('events', () => {
   it('Should handle input events', () => {
@@ -55,5 +58,13 @@ describe('events', () => {
     r1.dispatchEvent(new Event('input'));
     r2.dispatchEvent(new Event('change'));
     expect(handler.mock.calls).toMatchSnapshot();
+  });
+
+  it('Should return undefined if event processor returns undefined', () => {
+    const handler = jest.fn();
+    const processor = () => undefined;
+    const f = e.from(processor, handler);
+    expect(f()).toBeUndefined();
+    expect(handler).not.toHaveBeenCalled();
   });
 });

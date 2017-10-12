@@ -33,6 +33,10 @@ html("div", {on: {
 }});
 ```
 
+Event processors can also return `undefined`, in which case the handler is never
+invoked. This can be used to handle a subset of events (e.g., only some key
+codes in a `keypress` event).
+
 By convention, we name the processor after the names of the events they handle.
 
 ## `duckweed.events.inputEvent()`

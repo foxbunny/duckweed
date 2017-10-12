@@ -5,7 +5,7 @@
 
 import * as is from './is';
 
-type ArgsProcessor = (...args) => any[];
+type ArgsProcessor = (...args) => any[] | undefined;
 type EventHandler = (...args) => void;
 
 
@@ -13,7 +13,8 @@ type EventHandler = (...args) => void;
  * Decorates an event handler with a processor
  */
 const from = (processor: ArgsProcessor, handler: EventHandler): EventHandler => (...eventArgs) =>
-  handler(...processor(...eventArgs));
+  (args => args && handler(...args)
+  )(processor(...eventArgs));
 
 
 /**
