@@ -16,6 +16,7 @@ the Duckweed internals will find useful comments in the source code.
 
 ## Documentation outline
 
+- [Changelog](./changes.md)
 - [Duckweed developer guide](./guide/main.md)
   - [Hello Duckweed](./guide/hello-duckweed.md)
   - [A small but complete example with JSX](./guide/mav-example.md)
