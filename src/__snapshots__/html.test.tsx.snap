@@ -280,3 +280,31 @@ Object {
   "text": "Foo",
 }
 `;
+
+exports[`html with jsx should be able to add attributes to elements 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [],
+      "data": Object {
+        "attrs": Object {
+          "id": "something",
+        },
+      },
+      "elm": undefined,
+      "key": undefined,
+      "sel": "input",
+      "text": undefined,
+    },
+  ],
+  "data": Object {
+    "attrs": Object {
+      "for": "something",
+    },
+  },
+  "elm": undefined,
+  "key": undefined,
+  "sel": "label",
+  "text": undefined,
+}
+`;

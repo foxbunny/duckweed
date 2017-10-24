@@ -108,4 +108,13 @@ describe('html with jsx', () => {
     );
     expect(vn).toMatchSnapshot();
   });
+
+  it('should be able to add attributes to elements', () => {
+    const vn = (
+      <label _for="something">
+        <input _id="something" />
+      </label>
+    );
+    expect(vn).toMatchSnapshot();
+  });
 });

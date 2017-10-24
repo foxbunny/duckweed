@@ -5,6 +5,7 @@
 
 import * as snabbdom from 'snabbdom';
 import snab from 'snabbdom/h';
+import snabAttrs from 'snabbdom/modules/attributes';
 import snabClass from 'snabbdom/modules/class';
 import snabEvents from 'snabbdom/modules/eventlisteners';
 import snabProps from 'snabbdom/modules/props';
@@ -35,6 +36,7 @@ type ClassNames = string | string[] | ClassMap;
 
 
 const patch = snabbdom.init([
+  snabAttrs,
   snabClass,
   styleModule,
   snabEvents,
@@ -89,6 +91,9 @@ const prepareProps = (props: GenericProps | null): GenericProps =>
               ps.style = props[prop];
             } else if (prop === 'route') {
               ps.route = props[prop];
+            } else if (prop[0] === '_') {
+              ps.attrs = ps.attrs || {};
+              ps.attrs[prop.slice(1)] = props[prop];
             } else {
               ps.props = ps.props || {};
               ps.props[prop] = props[prop];
