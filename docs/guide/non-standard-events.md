@@ -73,17 +73,17 @@ When not using `duckweed.html()` factory, these props are specified as `{off:
 Even though keyboard events can be handled using `on-keyup`, `on-keydown`, and
 similar props, a set of special props are provided as a convenience:
 
-- `key-backspace`
-- `key-tab`
-- `key-enter`
-- `key-escape`
-- `key-pageup`
-- `key-pagedown`
-- `key-left`
-- `key-up`
-- `key-right`
-- `key-down`
-- `key-delete`
+- `keys-backspace`
+- `keys-tab`
+- `keys-enter`
+- `keys-escape`
+- `keys-pageup`
+- `keys-pagedown`
+- `keys-left`
+- `keys-up`
+- `keys-right`
+- `keys-down`
+- `keys-delete`
 
 These props are an alias for `on-keyup` event that trigger only for the specific
 keys. They are used the same way as `on-keyup` prop.
