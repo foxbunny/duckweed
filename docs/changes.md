@@ -1,6 +1,9 @@
 # Changelog
 
-- 1.x
+- 1.1.0
+  - Documentation cleanup
+  - Add the ability to specify HTML attributes using `_name` props in `html()`
+- 1.0.0
   - Code base cleaned up with a completely new coding style
   - New architecture using synchronous update function and continuation with
     promises, removed `patch()`

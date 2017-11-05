@@ -208,15 +208,17 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var snabbdom = __webpack_require__(7);
 var h_1 = __webpack_require__(0);
-var class_1 = __webpack_require__(10);
-var eventlisteners_1 = __webpack_require__(11);
-var props_1 = __webpack_require__(12);
-var style_1 = __webpack_require__(13);
-var docevents_1 = __webpack_require__(14);
-var keyevents_1 = __webpack_require__(15);
-var offevents_1 = __webpack_require__(16);
-var routeevents_1 = __webpack_require__(17);
+var attributes_1 = __webpack_require__(10);
+var class_1 = __webpack_require__(11);
+var eventlisteners_1 = __webpack_require__(12);
+var props_1 = __webpack_require__(13);
+var style_1 = __webpack_require__(14);
+var docevents_1 = __webpack_require__(15);
+var keyevents_1 = __webpack_require__(16);
+var offevents_1 = __webpack_require__(17);
+var routeevents_1 = __webpack_require__(18);
 var patch = snabbdom.init([
+    attributes_1.default,
     class_1.default,
     style_1.default,
     eventlisteners_1.default,
@@ -273,6 +275,10 @@ var prepareProps = function (props) {
             }
             else if (prop === 'route') {
                 ps.route = props[prop];
+            }
+            else if (prop[0] === '_') {
+                ps.attrs = ps.attrs || {};
+                ps.attrs[prop.slice(1)] = props[prop];
             }
             else {
                 ps.props = ps.props || {};
@@ -379,9 +385,9 @@ var events = __webpack_require__(6);
 exports.events = events;
 var html_1 = __webpack_require__(2);
 exports.html = html_1.default;
-var runner_1 = __webpack_require__(22);
+var runner_1 = __webpack_require__(23);
 exports.runner = runner_1.default;
-var scoped = __webpack_require__(23);
+var scoped = __webpack_require__(24);
 exports.scoped = scoped;
 
 
@@ -895,6 +901,67 @@ exports.default = exports.thunk;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var xlinkNS = 'http://www.w3.org/1999/xlink';
+var xmlNS = 'http://www.w3.org/XML/1998/namespace';
+var colonChar = 58;
+var xChar = 120;
+function updateAttrs(oldVnode, vnode) {
+    var key, elm = vnode.elm, oldAttrs = oldVnode.data.attrs, attrs = vnode.data.attrs;
+    if (!oldAttrs && !attrs)
+        return;
+    if (oldAttrs === attrs)
+        return;
+    oldAttrs = oldAttrs || {};
+    attrs = attrs || {};
+    // update modified attributes, add new attributes
+    for (key in attrs) {
+        var cur = attrs[key];
+        var old = oldAttrs[key];
+        if (old !== cur) {
+            if (cur === true) {
+                elm.setAttribute(key, "");
+            }
+            else if (cur === false) {
+                elm.removeAttribute(key);
+            }
+            else {
+                if (key.charCodeAt(0) !== xChar) {
+                    elm.setAttribute(key, cur);
+                }
+                else if (key.charCodeAt(3) === colonChar) {
+                    // Assume xml namespace
+                    elm.setAttributeNS(xmlNS, key, cur);
+                }
+                else if (key.charCodeAt(5) === colonChar) {
+                    // Assume xlink namespace
+                    elm.setAttributeNS(xlinkNS, key, cur);
+                }
+                else {
+                    elm.setAttribute(key, cur);
+                }
+            }
+        }
+    }
+    // remove removed attributes
+    // use `in` operator since the previous `for` iteration uses it (.i.e. add even attributes with undefined value)
+    // the other option is to remove all attributes with value == undefined
+    for (key in oldAttrs) {
+        if (!(key in attrs)) {
+            elm.removeAttribute(key);
+        }
+    }
+}
+exports.attributesModule = { create: updateAttrs, update: updateAttrs };
+exports.default = exports.attributesModule;
+//# sourceMappingURL=attributes.js.map
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 function updateClass(oldVnode, vnode) {
     var cur, name, elm = vnode.elm, oldClass = oldVnode.data.class, klass = vnode.data.class;
     if (!oldClass && !klass)
@@ -920,7 +987,7 @@ exports.default = exports.classModule;
 //# sourceMappingURL=class.js.map
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1021,7 +1088,7 @@ exports.default = exports.eventListenersModule;
 //# sourceMappingURL=eventlisteners.js.map
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1053,7 +1120,7 @@ exports.default = exports.propsModule;
 //# sourceMappingURL=props.js.map
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1145,7 +1212,7 @@ exports.default = exports.styleModule;
 //# sourceMappingURL=style.js.map
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1216,7 +1283,7 @@ exports.default = module;
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1301,7 +1368,7 @@ exports.default = module;
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1380,7 +1447,7 @@ exports.default = module;
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1390,7 +1457,7 @@ exports.default = module;
  * All rights reserved.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-var qs = __webpack_require__(18);
+var qs = __webpack_require__(19);
 var handleEvent = function (data, vnode) {
     return (function (route) {
         return typeof route === 'function' && route(data);
@@ -1437,14 +1504,14 @@ exports.default = module;
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var strictUriEncode = __webpack_require__(19);
-var objectAssign = __webpack_require__(20);
-var decodeComponent = __webpack_require__(21);
+var strictUriEncode = __webpack_require__(20);
+var objectAssign = __webpack_require__(21);
+var decodeComponent = __webpack_require__(22);
 
 function encoderForArrayFormat(opts) {
 	switch (opts.arrayFormat) {
@@ -1650,7 +1717,7 @@ exports.stringify = function (obj, opts) {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1663,7 +1730,7 @@ module.exports = function (str) {
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1760,7 +1827,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1861,7 +1928,7 @@ module.exports = function (encodedURI) {
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2002,7 +2069,7 @@ exports.default = runner;
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
